@@ -1,0 +1,10 @@
+Repositorio GitHub - 04-08-2026
+
+Proyecto:
+Gestor Reservas Académicas
+
+Repositorio
+
+https://github.com/DuvanFJ/Gestor-Reservas-Acad-micas.git
+
+Versionamiento realizado mediante Git.
