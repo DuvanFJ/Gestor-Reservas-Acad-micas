@@ -1,0 +1,159 @@
+/* ===========================
+   CONTENEDOR DE LA TABLA
+=========================== */
+
+.tabla-container{
+    margin-top:50px;
+    text-align:center;
+}
+
+.tabla-container h3{
+    color:#1565C0;
+    font-size:30px;
+    margin-bottom:25px;
+}
+
+/* ===========================
+   TABLA
+=========================== */
+
+.tabla{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:15px;
+    background:white;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+    table-layout:auto;
+}
+
+.tabla thead{
+    background:linear-gradient(135deg,#1565C0,#0D47A1);
+    color:white;
+}
+
+.tabla th{
+    padding:18px;
+    font-size:17px;
+    white-space:nowrap;
+}
+
+.tabla td{
+    padding:18px;
+    border-bottom:1px solid #eeeeee;
+    text-align:center;
+    transition:.3s;
+    vertical-align:middle;
+}
+
+.tabla tbody tr:nth-child(even){
+    background:#f8f9fc;
+}
+
+.tabla tbody tr:hover{
+    background:#E3F2FD;
+}
+
+/* ===========================
+   ESTADOS
+=========================== */
+
+.estado{
+    display:inline-block;
+    padding:8px 15px;
+    border-radius:30px;
+    color:white;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.estado.aprobada,
+.estado.aprobado{
+    background:#2E7D32;
+}
+
+.estado.pendiente{
+    background:#F9A825;
+}
+
+.estado.rechazada,
+.estado.rechazado{
+    background:#C62828;
+}
+
+/* ===========================
+   COLUMNA DE ACCIONES
+=========================== */
+
+.tabla td:last-child{
+    white-space:nowrap;
+}
+
+.acciones{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+}
+
+/* ===========================
+   BOTONES
+=========================== */
+
+.editar,
+.eliminar{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:.3s;
+    color:white;
+    font-size:14px;
+}
+
+.editar{
+    background:#FB8C00;
+}
+
+.editar:hover{
+    background:#EF6C00;
+    transform:translateY(-2px);
+}
+
+.eliminar{
+    background:#D32F2F;
+}
+
+.eliminar:hover{
+    background:#B71C1C;
+    transform:translateY(-2px);
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width:900px){
+
+    .tabla{
+        font-size:14px;
+        display:block;
+        overflow-x:auto;
+    }
+
+    .tabla th,
+    .tabla td{
+        padding:10px;
+    }
+
+    .editar,
+    .eliminar{
+        padding:8px 12px;
+        font-size:13px;
+    }
+}
