@@ -29,10 +29,10 @@ public class SecurityConfig {
             // Habilitar CORS
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // Desactivar CSRF porque usamos JWT
+            // Desactivar CSRF porque utilizamos JWT
             .csrf(csrf -> csrf.disable())
 
-            // No usar sesiones
+            // No utilizar sesiones
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
@@ -44,6 +44,9 @@ public class SecurityConfig {
 
                 // Login público
                 .requestMatchers("/api/auth/login").permitAll()
+
+                // API pública
+                .requestMatchers("/api/publica/**").permitAll()
 
                 // Todo lo demás requiere JWT
                 .anyRequest().authenticated()
