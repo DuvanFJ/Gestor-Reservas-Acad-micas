@@ -1,179 +1,352 @@
-.dashboard{
+/* =========================================
+   DASHBOARD
+   ========================================= */
 
-    width:90%;
+.dashboard {
 
-    margin:auto;
+    min-height: 650px;
 
-    padding:40px 0;
+    padding: 45px;
 
-    text-align:center;
+    box-sizing: border-box;
+
+    background-color: #12151b;
+}
+
+
+/* =========================================
+   BIENVENIDA
+   ========================================= */
+
+.dashboard-bienvenida {
+
+    max-width: 1000px;
+
+    margin: 0 auto 40px;
+
+    text-align: center;
+}
+
+
+.dashboard-etiqueta {
+
+    display: inline-block;
+
+    padding: 6px 13px;
+
+    margin-bottom: 12px;
+
+    border-radius: 20px;
+
+    background-color:
+        rgba(23, 105, 194, 0.15);
+
+    color: #4b9bea;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+.dashboard-bienvenida h2 {
+
+    margin: 0 0 12px;
+
+    color: #1976D2;
+
+    font-size: 32px;
+
+    line-height: 1.25;
+}
+
+
+.dashboard-bienvenida p {
+
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    color: #aeb6c2;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   ESTADÍSTICAS
+   ========================================= */
+
+.estadisticas {
+
+    max-width: 800px;
+
+    margin: 0 auto 50px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 25px;
+}
+
+
+.estadistica {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 25px;
+
+    box-sizing: border-box;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1d232b,
+            #171b21
+        );
+
+    border: 1px solid #2c333d;
+
+    box-shadow:
+        0 8px 22px
+        rgba(0, 0, 0, 0.25);
+
+    transition: 0.25s;
+}
+
+
+.estadistica:hover {
+
+    transform: translateY(-4px);
+
+    border-color: #1769c2;
+}
+
+
+.estadistica-icono-contenedor {
+
+    width: 60px;
+
+    height: 60px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background-color:
+        rgba(23, 105, 194, 0.15);
+
+    color: #3186d8;
+
+    font-size: 27px;
+}
+
+
+.estadistica h2 {
+
+    margin: 0 0 3px;
+
+    color: #ffffff;
+
+    font-size: 30px;
+}
+
+
+.estadistica span {
+
+    color: #aeb6c2;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   ACCESOS RÁPIDOS
+   ========================================= */
+
+.dashboard-seccion {
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+}
+
+
+.dashboard-seccion > h3 {
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 22px;
+
+    text-align: center;
+}
+
+
+.dashboard-seccion > p {
+
+    margin: 8px 0 25px;
+
+    color: #8993a1;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   TARJETAS
+   ========================================= */
+
+.cards {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+}
+
+
+.card {
+
+    min-height: 205px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 25px;
+
+    box-sizing: border-box;
+
+    border-radius: 15px;
+
+    background-color: #ffffff;
+
+    color: #555;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    border: 1px solid #e6e8eb;
+
+    box-shadow:
+        0 8px 22px
+        rgba(0, 0, 0, 0.20);
+
+    transition:
+        transform 0.25s,
+        box-shadow 0.25s;
+}
+
+
+.card:hover {
+
+    transform: translateY(-7px);
+
+    box-shadow:
+        0 15px 30px
+        rgba(0, 0, 0, 0.30);
+}
+
+
+.card .icono {
+
+    margin-bottom: 15px;
+
+    color: #1769c2;
+
+    font-size: 42px;
+}
+
+
+.card h3 {
+
+    margin: 0 0 9px;
+
+    color: #1565C0;
+
+    font-size: 16px;
+}
+
+
+.card p {
+
+    margin: 0;
+
+    color: #666;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 950px) {
+
+    .cards {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
 
 }
 
-.dashboard h2{
 
-    color:#1565C0;
+@media (max-width: 700px) {
 
-    font-size:34px;
+    .dashboard {
 
-    margin-bottom:10px;
+        padding: 30px 20px;
+    }
 
-}
 
-.dashboard p{
+    .dashboard-bienvenida h2 {
 
-    color:#666;
+        font-size: 25px;
+    }
 
-    font-size:18px;
 
-    margin-bottom:35px;
+    .estadisticas {
 
-}
+        grid-template-columns: 1fr;
+    }
 
-/* ===== ESTADÍSTICAS ===== */
 
-.estadisticas{
+    .cards {
 
-    display:flex;
-
-    justify-content:center;
-
-    gap:30px;
-
-    margin-bottom:50px;
-
-    flex-wrap:wrap;
-
-}
-
-.estadistica{
-
-    width:240px;
-
-    background:white;
-
-    border-radius:18px;
-
-    padding:25px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.12);
-
-    transition:.3s;
-
-}
-
-.estadistica:hover{
-
-    transform:translateY(-6px);
-
-}
-
-.estadistica-icono{
-
-    font-size:45px;
-
-    color:#1565C0;
-
-    margin-bottom:15px;
-
-}
-
-.estadistica h2{
-
-    margin:0;
-
-    color:#0D47A1;
-
-    font-size:42px;
-
-}
-
-.estadistica span{
-
-    color:#666;
-
-    font-size:17px;
-
-}
-
-/* ===== TARJETAS ===== */
-
-.cards{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:30px;
-
-    flex-wrap:wrap;
-
-}
-
-.card{
-
-    width:300px;
-
-    text-decoration:none;
-
-    color:#333;
-
-    background:white;
-
-    border-radius:18px;
-
-    padding:30px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.12);
-
-    transition:.3s;
-
-}
-
-.card:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:0 15px 30px rgba(0,0,0,.18);
-
-}
-
-.icono{
-
-    font-size:55px;
-
-    color:#1565C0;
-
-    margin-bottom:18px;
-
-}
-
-.card h3{
-
-    margin-bottom:10px;
-
-    color:#1565C0;
-
-}
-
-.card p{
-
-    color:#666;
-
-}
-
-/* ===== RESPONSIVE ===== */
-
-@media(max-width:768px){
-
-    .estadisticas,
-
-    .cards{
-
-        flex-direction:column;
-
-        align-items:center;
-
+        grid-template-columns: 1fr;
     }
 
 }

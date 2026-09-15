@@ -1,0 +1,419 @@
+/* =========================================
+   PÁGINA DE USUARIOS
+   ========================================= */
+
+.usuarios-pagina {
+
+    min-height: 650px;
+
+    padding: 45px;
+
+    box-sizing: border-box;
+
+    background-color: #12151b;
+}
+
+
+/* =========================================
+   ENCABEZADO
+   ========================================= */
+
+.usuarios-encabezado {
+
+    max-width: 1050px;
+
+    margin: 0 auto 35px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+}
+
+
+.usuarios-titulo-icono {
+
+    width: 70px;
+
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1976D2,
+            #0D47A1
+        );
+
+    color: white;
+
+    font-size: 30px;
+
+    box-shadow:
+        0 8px 20px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+.usuarios-encabezado h1 {
+
+    margin: 0 0 8px;
+
+    color: #1976D2;
+
+    font-size: 32px;
+
+    font-weight: 700;
+}
+
+
+.usuarios-encabezado p {
+
+    margin: 0;
+
+    color: #aeb6c2;
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   CONTENIDO
+   ========================================= */
+
+.usuarios-contenido {
+
+    max-width: 1050px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns: 330px 1fr;
+
+    gap: 25px;
+
+    align-items: start;
+}
+
+
+/* =========================================
+   CAJA DEL FORMULARIO
+   ========================================= */
+
+.usuarios-formulario {
+
+    padding: 25px;
+
+    box-sizing: border-box;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1b2028,
+            #15191f
+        );
+
+    border: 1px solid #2b323d;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+/* Títulos del formulario */
+
+.usuarios-formulario h1,
+.usuarios-formulario h2,
+.usuarios-formulario h3 {
+
+    margin-top: 0;
+
+    color: #1976D2;
+}
+
+
+/* Etiquetas */
+
+.usuarios-formulario label {
+
+    color: #e6e9ed;
+
+    font-weight: 600;
+}
+
+
+/* Campos */
+
+.usuarios-formulario input,
+.usuarios-formulario select {
+
+    width: 100%;
+
+    padding: 11px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #3a424e;
+
+    border-radius: 8px;
+
+    background-color: #242a32;
+
+    color: #ffffff;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+
+.usuarios-formulario input:focus,
+.usuarios-formulario select:focus {
+
+    border-color: #1976D2;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(25, 118, 210, 0.15);
+}
+
+
+/* =========================================
+   BOTONES DEL FORMULARIO
+   ========================================= */
+
+.usuarios-formulario button {
+
+    border: none;
+
+    border-radius: 8px;
+
+    background-color: #1976D2;
+
+    color: white;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.usuarios-formulario button:hover {
+
+    background-color: #0D5EAE;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   LISTADO
+   ========================================= */
+
+.usuarios-listado {
+
+    min-width: 0;
+
+    padding: 25px;
+
+    box-sizing: border-box;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1b2028,
+            #15191f
+        );
+
+    border: 1px solid #2b323d;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
+
+    overflow-x: auto;
+}
+
+
+/* =========================================
+   ENCABEZADO DEL LISTADO
+   ========================================= */
+
+.usuarios-listado-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #303742;
+}
+
+
+.usuarios-listado-header h2 {
+
+    margin: 0;
+
+    color: #1976D2;
+
+    font-size: 21px;
+}
+
+
+.usuarios-listado-header span {
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background-color:
+        rgba(25, 118, 210, 0.15);
+
+    color: #64a9ed;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   TABLA DE USUARIOS
+   ========================================= */
+
+.usuarios-listado table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    color: #e8eaed;
+}
+
+
+.usuarios-listado th {
+
+    padding: 12px;
+
+    background-color: #1769c2;
+
+    color: white;
+
+    text-align: left;
+
+    font-size: 13px;
+}
+
+
+.usuarios-listado td {
+
+    padding: 11px 12px;
+
+    border-bottom: 1px solid #303742;
+
+    color: #d9dde3;
+
+    font-size: 13px;
+}
+
+
+.usuarios-listado tr:hover td {
+
+    background-color: #222831;
+}
+
+
+/* =========================================
+   MENSAJES
+   ========================================= */
+
+.usuarios-mensaje {
+
+    padding: 30px;
+
+    color: #aeb6c2;
+
+    text-align: center;
+}
+
+
+.usuarios-error {
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    background-color: #4a1f24;
+
+    color: #ff9ca5;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 850px) {
+
+    .usuarios-pagina {
+
+        padding: 30px 20px;
+    }
+
+
+    .usuarios-contenido {
+
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .usuarios-encabezado h1 {
+
+        font-size: 25px;
+    }
+
+
+    .usuarios-listado-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+}

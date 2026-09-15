@@ -1,119 +1,144 @@
-.formulario{
+.formulario {
+    width: 500px;
+    max-width: 100%;
 
-    background:white;
+    margin: 30px auto;
+    padding: 30px;
 
-    width:500px;
+    box-sizing: border-box;
 
-    max-width:100%;
+    border-radius: 15px;
 
-    margin:30px auto;
+    background: linear-gradient(
+        145deg,
+        #1b2028,
+        #15191f
+    );
 
-    padding:30px;
+    border: 1px solid #2b323d;
 
-    border-radius:15px;
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25);
 
-    box-shadow:0 8px 25px rgba(0,0,0,.12);
-
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.formulario h3{
+.formulario:hover {
+    transform: translateY(-2px);
 
-    color:#1565C0;
-
-    margin-bottom:25px;
-
-    text-align:center;
-
-    font-size:28px;
-
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.30);
 }
+
+/* =========================
+   TITULO
+========================= */
+
+.formulario h3 {
+    margin: 0 0 25px;
+
+    color: #1976D2;
+
+    text-align: center;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+/* =========================
+   CAMPOS
+========================= */
 
 .formulario input,
-.formulario select{
+.formulario select {
+    width: 100%;
 
-    width:100%;
+    padding: 13px;
 
-    padding:13px;
+    margin-bottom: 18px;
 
-    margin-bottom:18px;
+    box-sizing: border-box;
 
-    border:1px solid #d6d6d6;
+    border: 1px solid #3a424e;
+    border-radius: 8px;
 
-    border-radius:8px;
+    background-color: #242a32;
+    color: #ffffff;
 
-    font-size:15px;
+    font-size: 15px;
 
-    transition:.3s;
+    outline: none;
 
-    box-sizing:border-box;
+    transition: 0.2s;
+}
 
+.formulario input::placeholder {
+    color: #8993a1;
 }
 
 .formulario input:focus,
-.formulario select:focus{
+.formulario select:focus {
+    border-color: #1976D2;
 
-    outline:none;
-
-    border-color:#1565C0;
-
-    box-shadow:0 0 10px rgba(21,101,192,.2);
-
+    box-shadow:
+        0 0 0 3px rgba(25, 118, 210, 0.15);
 }
 
-.formulario button{
-
-    width:100%;
-
-    padding:14px;
-
-    background:#1565C0;
-
-    color:white;
-
-    border:none;
-
-    border-radius:8px;
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:.3s;
-
+.formulario select {
+    cursor: pointer;
 }
 
-.formulario button:hover{
+/* =========================
+   BOTON
+========================= */
 
-    background:#0D47A1;
+.formulario button {
+    width: 100%;
 
-    transform:translateY(-2px);
+    padding: 14px;
 
+    margin-top: 5px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #1976D2;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-@media(max-width:700px){
+.formulario button:hover {
+    background-color: #0D5EAE;
 
-    .formulario{
+    transform: translateY(-1px);
 
-        width:95%;
+    box-shadow:
+        0 5px 15px rgba(25, 118, 210, 0.25);
+}
 
-        padding:20px;
+/* =========================
+   RESPONSIVE
+========================= */
 
+@media (max-width: 700px) {
+
+    .formulario {
+        width: 95%;
+        padding: 20px;
     }
 
-}
-
-.formulario{
-
-    transition:.3s;
-
-}
-
-.formulario:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:0 12px 30px rgba(0,0,0,.15);
-
+    .formulario h3 {
+        font-size: 22px;
+    }
 }

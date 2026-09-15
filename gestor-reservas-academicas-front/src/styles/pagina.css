@@ -1,99 +1,103 @@
-.contenido{
-
-    width:90%;
-
-    max-width:1200px;
-
-    margin:auto;
-
-    margin-top:35px;
-
-    margin-bottom:50px;
-
+.contenido {
+    width: 90%;
+    max-width: 1200px;
+    min-height: 650px;
+    margin: 0 auto;
+    padding: 45px 0;
+    box-sizing: border-box;
 }
 
-.contenido h2{
+/* =========================
+   TITULO DE LA PAGINA
+========================= */
 
-    display:flex;
+.contenido h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 
-    justify-content:center;
+    margin: 0 0 12px;
 
-    align-items:center;
-
-    gap:10px;
-
-    font-size:34px;
-
-    margin-bottom:15px;
-
+    color: #1976D2;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
 }
 
-.contenido h2{
+.contenido > p {
+    margin: 0 0 20px;
 
-    color:#1565C0;
-
+    color: #aeb6c2;
+    font-size: 15px;
+    text-align: center;
 }
 
-.contenido p{
+/* =========================
+   BUSCADOR
+========================= */
 
-    color:#555;
+.buscador {
+    display: block;
 
+    width: 320px;
+    max-width: 100%;
+
+    padding: 12px 15px;
+    margin: 25px auto 35px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #3a424e;
+    border-radius: 10px;
+
+    background-color: #242a32;
+    color: #ffffff;
+
+    font-size: 15px;
+    outline: none;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20);
+
+    transition: 0.25s;
 }
 
-.buscador{
-
-    width:320px;
-
-    padding:12px;
-
-    border-radius:10px;
-
-    border:1px solid #cfd8dc;
-
-    font-size:15px;
-
-    margin-bottom:25px;
-
-    outline:none;
-
-    transition:.3s;
-
+.buscador::placeholder {
+    color: #8993a1;
 }
 
-.buscador:focus{
+.buscador:focus {
+    border-color: #1976D2;
 
-    border-color:#1565C0;
-
-    box-shadow:0 0 10px rgba(21,101,192,.25);
-
+    box-shadow:
+        0 0 0 3px rgba(25, 118, 210, 0.15),
+        0 5px 15px rgba(0, 0, 0, 0.20);
 }
 
-.buscador{
-
-    width:320px;
-
-    padding:12px 15px;
-
-    margin:20px 0 30px;
-
-    border:1px solid #d0d7de;
-
-    border-radius:10px;
-
-    font-size:15px;
-
-    outline:none;
-
-    transition:.3s;
-
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-
+.buscador:hover {
+    border-color: #4a5665;
 }
 
-.buscador:focus{
+/* =========================
+   RESPONSIVE
+========================= */
 
-    border-color:#1565C0;
+@media (max-width: 700px) {
 
-    box-shadow:0 0 10px rgba(21,101,192,.25);
+    .contenido {
+        width: 92%;
+        padding: 30px 0;
+    }
 
+    .contenido h2 {
+        font-size: 25px;
+    }
+
+    .contenido > p {
+        font-size: 14px;
+    }
+
+    .buscador {
+        width: 100%;
+    }
 }

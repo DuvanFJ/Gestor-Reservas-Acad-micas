@@ -1,52 +1,124 @@
-import { Link, useLocation } from "react-router-dom";
-import { FaHome, FaDoorOpen, FaCalendarAlt } from "react-icons/fa";
+import {
+    Link,
+    useLocation,
+    useNavigate
+} from "react-router-dom";
+
+import {
+    FaHome,
+    FaDoorOpen,
+    FaCalendarAlt,
+    FaSchool,
+    FaUsers,
+    FaSignOutAlt
+} from "react-icons/fa";
 
 import "../styles/navbar.css";
 
-// Barra de navegación principal del sistema
 function Navbar() {
 
-    // Obtiene la ruta actual para resaltar el menú activo
     const location = useLocation();
+    const navigate = useNavigate();
+
+    function cerrarSesion() {
+
+        localStorage.removeItem("token");
+
+        navigate("/login");
+    }
 
     return (
 
         <nav className="navbar">
 
-            {/* Enlace al Dashboard */}
+            {/* Inicio */}
+
             <Link
                 to="/"
-                className={location.pathname === "/" ? "activo" : ""}
+                className={
+                    location.pathname === "/"
+                        ? "activo"
+                        : ""
+                }
             >
-
-                <FaHome /> Inicio
-
+                <FaHome />
+                <span>Inicio</span>
             </Link>
 
-            {/* Enlace al módulo de gestión de salas */}
+
+            {/* Salas */}
+
             <Link
                 to="/salas"
-                className={location.pathname === "/salas" ? "activo" : ""}
+                className={
+                    location.pathname === "/salas"
+                        ? "activo"
+                        : ""
+                }
             >
-
-                <FaDoorOpen /> Salas
-
+                <FaDoorOpen />
+                <span>Salas</span>
             </Link>
 
-            {/* Enlace al módulo de gestión de reservas */}
+
+            {/* Aulas */}
+
+            <Link
+                to="/aulas"
+                className={
+                    location.pathname === "/aulas"
+                        ? "activo"
+                        : ""
+                }
+            >
+                <FaSchool />
+                <span>Aulas</span>
+            </Link>
+
+
+            {/* Reservas */}
+
             <Link
                 to="/reservas"
-                className={location.pathname === "/reservas" ? "activo" : ""}
+                className={
+                    location.pathname === "/reservas"
+                        ? "activo"
+                        : ""
+                }
             >
-
-                <FaCalendarAlt /> Reservas
-
+                <FaCalendarAlt />
+                <span>Reservas</span>
             </Link>
 
+
+            {/* Usuarios */}
+
+            <Link
+                to="/usuarios"
+                className={
+                    location.pathname === "/usuarios"
+                        ? "activo"
+                        : ""
+                }
+            >
+                <FaUsers />
+                <span>Usuarios</span>
+            </Link>
+
+
+            {/* Cerrar sesión */}
+
+            <button
+                type="button"
+                onClick={cerrarSesion}
+                className="boton-cerrar-sesion"
+            >
+                <FaSignOutAlt />
+                <span>Cerrar sesión</span>
+            </button>
+
         </nav>
-
     );
-
 }
 
 export default Navbar;

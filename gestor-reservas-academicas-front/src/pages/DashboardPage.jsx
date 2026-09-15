@@ -1,129 +1,283 @@
-// Componentes de la interfaz
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// Iconos
-import { FaDoorOpen, FaCalendarCheck } from "react-icons/fa";
+import {
+    FaDoorOpen,
+    FaCalendarCheck,
+    FaSchool,
+    FaUsers
+} from "react-icons/fa";
 
-// Hooks de React
 import { useEffect, useState } from "react";
 
-// Servicios para consumir la API
-import { obtenerSalas } from "../services/salaService";
-import { obtenerReservas } from "../services/reservaService";
+import {
+    obtenerSalas
+} from "../services/salaService";
 
-// Navegación
+import {
+    obtenerReservas
+} from "../services/reservaService";
+
 import { Link } from "react-router-dom";
 
-// Estilos
 import "../styles/dashboard.css";
 
 function DashboardPage() {
 
-    // Estados para almacenar estadísticas generales
     const [totalSalas, setTotalSalas] = useState(0);
     const [totalReservas, setTotalReservas] = useState(0);
 
-    // Al cargar la página se consultan las estadísticas
     useEffect(() => {
 
         cargarDatos();
 
     }, []);
 
-    // Obtiene la cantidad de salas y reservas registradas
+
     async function cargarDatos() {
 
-        const salas = await obtenerSalas();
-        const reservas = await obtenerReservas();
+        try {
 
-        setTotalSalas(salas.length);
-        setTotalReservas(reservas.length);
+            const salas = await obtenerSalas();
 
+            const reservas = await obtenerReservas();
+
+            setTotalSalas(salas.length);
+
+            setTotalReservas(reservas.length);
+
+        } catch (error) {
+
+            console.error(
+                "Error cargando estadísticas:",
+                error
+            );
+
+        }
     }
+
 
     return (
 
         <>
 
-            {/* Encabezado principal */}
+            {/* Encabezado */}
+
             <Header />
 
-            {/* Barra de navegación */}
+
+            {/* Navegación */}
+
             <Navbar />
 
-            <div className="dashboard">
 
-                <h2>Bienvenido al Gestor de Reservas Académicas</h2>
+            {/* Dashboard */}
 
-                <p>
+            <main className="dashboard">
 
-                    Sistema para la administración de salas y reservas académicas.
 
-                </p>
+                {/* =================================
+                    BIENVENIDA
+                   ================================= */}
 
-                {/* Tarjetas con estadísticas generales */}
-                <div className="estadisticas">
+                <section className="dashboard-bienvenida">
+
+                    <span className="dashboard-etiqueta">
+                        PANEL PRINCIPAL
+                    </span>
+
+                    <h2>
+                        Bienvenido al Gestor de
+                        Reservas Académicas
+                    </h2>
+
+                    <p>
+                        Sistema para la administración
+                        de espacios académicos, salas,
+                        aulas y reservas.
+                    </p>
+
+                </section>
+
+
+                {/* =================================
+                    ESTADÍSTICAS
+                   ================================= */}
+
+                <section className="estadisticas">
+
 
                     <div className="estadistica">
 
-                        <FaDoorOpen className="estadistica-icono" />
+                        <div className="estadistica-icono-contenedor">
 
-                        <h2>{totalSalas}</h2>
+                            <FaDoorOpen />
 
-                        <span>Salas registradas</span>
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                {totalSalas}
+                            </h2>
+
+                            <span>
+                                Salas registradas
+                            </span>
+
+                        </div>
 
                     </div>
+
 
                     <div className="estadistica">
 
-                        <FaCalendarCheck className="estadistica-icono" />
+                        <div className="estadistica-icono-contenedor">
 
-                        <h2>{totalReservas}</h2>
+                            <FaCalendarCheck />
 
-                        <span>Reservas registradas</span>
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                {totalReservas}
+                            </h2>
+
+                            <span>
+                                Reservas registradas
+                            </span>
+
+                        </div>
 
                     </div>
 
-                </div>
 
-                {/* Accesos rápidos */}
-                <div className="cards">
+                </section>
 
-                    <Link to="/salas" className="card">
 
-                        <FaDoorOpen className="icono" />
+                {/* =================================
+                    ACCESOS RÁPIDOS
+                   ================================= */}
 
-                        <h3>Gestión de Salas</h3>
+                <section className="dashboard-seccion">
 
-                        <p>
+                    <h3>
+                        Accesos rápidos
+                    </h3>
 
-                            Registrar, editar y eliminar salas.
+                    <p>
+                        Selecciona una opción para
+                        administrar el sistema.
+                    </p>
 
-                        </p>
 
-                    </Link>
+                    <div className="cards">
 
-                    <Link to="/reservas" className="card">
 
-                        <FaCalendarCheck className="icono" />
+                        {/* Salas */}
 
-                        <h3>Gestión de Reservas</h3>
+                        <Link
+                            to="/salas"
+                            className="card"
+                        >
 
-                        <p>
+                            <FaDoorOpen
+                                className="icono"
+                            />
 
-                            Administrar reservas académicas.
+                            <h3>
+                                Gestión de Salas
+                            </h3>
 
-                        </p>
+                            <p>
+                                Registrar, editar y
+                                eliminar salas.
+                            </p>
 
-                    </Link>
+                        </Link>
 
-                </div>
 
-            </div>
+                        {/* Aulas */}
 
-            {/* Pie de página */}
+                        <Link
+                            to="/aulas"
+                            className="card"
+                        >
+
+                            <FaSchool
+                                className="icono"
+                            />
+
+                            <h3>
+                                Gestión de Aulas
+                            </h3>
+
+                            <p>
+                                Administrar las aulas
+                                disponibles.
+                            </p>
+
+                        </Link>
+
+
+                        {/* Reservas */}
+
+                        <Link
+                            to="/reservas"
+                            className="card"
+                        >
+
+                            <FaCalendarCheck
+                                className="icono"
+                            />
+
+                            <h3>
+                                Gestión de Reservas
+                            </h3>
+
+                            <p>
+                                Administrar reservas
+                                académicas.
+                            </p>
+
+                        </Link>
+
+
+                        {/* Usuarios */}
+
+                        <Link
+                            to="/usuarios"
+                            className="card"
+                        >
+
+                            <FaUsers
+                                className="icono"
+                            />
+
+                            <h3>
+                                Gestión de Usuarios
+                            </h3>
+
+                            <p>
+                                Administrar los usuarios
+                                del sistema.
+                            </p>
+
+                        </Link>
+
+
+                    </div>
+
+                </section>
+
+
+            </main>
+
+
+            {/* Footer */}
+
             <Footer />
 
         </>

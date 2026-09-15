@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
+
 import { obtenerUsuarios } from "../services/usuarioService";
+
 import UsuarioTable from "../components/UsuarioTable";
 import FormularioUsuario from "../components/FormularioUsuario";
+
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
+import { FaUsers } from "react-icons/fa";
+
+import "../styles/usuario.css";
 
 function Usuario() {
 
@@ -16,6 +26,7 @@ function Usuario() {
     async function cargarUsuarios() {
 
         try {
+
             setCargando(true);
             setError("");
 
@@ -26,7 +37,10 @@ function Usuario() {
         } catch (error) {
 
             console.error(error);
-            setError("No se pudieron cargar los usuarios.");
+
+            setError(
+                "No se pudieron cargar los usuarios."
+            );
 
         } finally {
 
@@ -35,31 +49,98 @@ function Usuario() {
     }
 
     return (
-        <div className="pagina">
+        <>
+            <Header />
 
-            <FormularioUsuario onUsuarioGuardado={cargarUsuarios} />
+            <Navbar />
 
-            <h1>Usuarios</h1>
+            <main className="usuarios-pagina">
 
-            {cargando && (
-                <p>Cargando usuarios...</p>
-            )}
+                <section className="usuarios-encabezado">
 
-            {error && (
-                <p>{error}</p>
-            )}
+                    <div className="usuarios-titulo-icono">
+                        <FaUsers />
+                    </div>
 
-            {!cargando && !error && (
-                <div>
-                    {usuarios.length === 0 ? (
-                        <p>No hay usuarios registrados.</p>
-                    ) : (
-                        <UsuarioTable usuarios={usuarios} />
-                    )}
-                </div>
-            )}
+                    <div>
+                        <h1>
+                            Gestión de Usuarios
+                        </h1>
 
-        </div>
+                        <p>
+                            Administración de usuarios
+                            registrados en el sistema.
+                        </p>
+                    </div>
+
+                </section>
+
+
+                <section className="usuarios-contenido">
+
+                    <div className="usuarios-formulario">
+
+                        <FormularioUsuario
+                            onUsuarioGuardado={cargarUsuarios}
+                        />
+
+                    </div>
+
+
+                    <div className="usuarios-listado">
+
+                        <div className="usuarios-listado-header">
+
+                            <h2>
+                                Usuarios registrados
+                            </h2>
+
+                            <span>
+                                {usuarios.length} usuario(s)
+                            </span>
+
+                        </div>
+
+
+                        {cargando && (
+                            <p className="usuarios-mensaje">
+                                Cargando usuarios...
+                            </p>
+                        )}
+
+
+                        {error && (
+                            <p className="usuarios-error">
+                                {error}
+                            </p>
+                        )}
+
+
+                        {!cargando && !error && (
+
+                            usuarios.length === 0 ? (
+
+                                <p className="usuarios-mensaje">
+                                    No hay usuarios registrados.
+                                </p>
+
+                            ) : (
+
+                                <UsuarioTable
+                                    usuarios={usuarios}
+                                />
+
+                            )
+                        )}
+
+                    </div>
+
+                </section>
+
+            </main>
+
+            <Footer />
+        </>
     );
 }
 
