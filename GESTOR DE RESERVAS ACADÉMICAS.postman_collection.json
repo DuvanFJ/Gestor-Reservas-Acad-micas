@@ -1,0 +1,811 @@
+{
+  "info": {
+    "_postman_id": "69d687cc-3c96-4c1e-87c2-a1bdaa6b11bd",
+    "name": "GESTOR DE RESERVAS ACADÉMICAS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57980456"
+  },
+  "item": [
+    {
+      "name": "01 - Autenticación y seguridad",
+      "item": [
+        {
+          "name": "POST - Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"correo\": \"duvan@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Usuarios",
+      "item": [
+        {
+          "name": "GET - Usuarios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5NzE1NywiZXhwIjoxNzg5NTAwNzU3fQ.hZP9PELLLeXTwysCxS5su7NW3zXQb5pxm6BKYYMi-Os",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET - Usuario ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5NzE1NywiZXhwIjoxNzg5NTAwNzU3fQ.hZP9PELLLeXTwysCxS5su7NW3zXQb5pxm6BKYYMi-Os",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/usuarios/10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "usuarios",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5NzE1NywiZXhwIjoxNzg5NTAwNzU3fQ.hZP9PELLLeXTwysCxS5su7NW3zXQb5pxm6BKYYMi-Os",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"Usuario EV04\",\r\n    \"correo\": \"usuarioev04@gmail.com\",\r\n    \"password\": \"123456\",\r\n    \"rol\": \"ADMIN\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5NzE1NywiZXhwIjoxNzg5NTAwNzU3fQ.hZP9PELLLeXTwysCxS5su7NW3zXQb5pxm6BKYYMi-Os",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"Usuario EV04 Actualizado\",\r\n    \"correo\": \"usuarioev04@gmail.com\",\r\n    \"password\": \"123456\",\r\n    \"rol\": \"ADMIN\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/usuarios/10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "usuarios",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5NzE1NywiZXhwIjoxNzg5NTAwNzU3fQ.hZP9PELLLeXTwysCxS5su7NW3zXQb5pxm6BKYYMi-Os",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/usuarios/9",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "usuarios",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Salas",
+      "item": [
+        {
+          "name": "Salas-DELETE",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5ODgwOCwiZXhwIjoxNzg5NTAyNDA4fQ.iVx0jbsY3oEmuDAYnmBCp_WwInGMm_9xfHc1hyExSPo",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/salas/27",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "salas",
+                "27"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Salas-GET",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5ODgwOCwiZXhwIjoxNzg5NTAyNDA4fQ.iVx0jbsY3oEmuDAYnmBCp_WwInGMm_9xfHc1hyExSPo",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/salas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "salas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Salas-GET ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5NzE1NywiZXhwIjoxNzg5NTAwNzU3fQ.hZP9PELLLeXTwysCxS5su7NW3zXQb5pxm6BKYYMi-Os",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/salas/5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "salas",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Salas-Post",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5NzE1NywiZXhwIjoxNzg5NTAwNzU3fQ.hZP9PELLLeXTwysCxS5su7NW3zXQb5pxm6BKYYMi-Os",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombreSala\": \"Sala de Video\",\r\n    \"tipoSala\": \"Punto Digital\",\r\n    \"capacidad\": 34,\r\n    \"ubicacion\": \"Bloque D\",\r\n    \"disponible\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/salas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "salas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Salas-PUT",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5NzE1NywiZXhwIjoxNzg5NTAwNzU3fQ.hZP9PELLLeXTwysCxS5su7NW3zXQb5pxm6BKYYMi-Os",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombreSala\": \"Sala de Video Actualizada\",\r\n    \"tipoSala\": \"Punto Digital\",\r\n    \"capacidad\": 34,\r\n    \"ubicacion\": \"Bloque D\",\r\n    \"disponible\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/salas/27",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "salas",
+                "27"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Aulas",
+      "item": [
+        {
+          "name": "Aulas-GET",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5OTIwNCwiZXhwIjoxNzg5NTAyODA0fQ.bRBoBdz5IBbMXR9M2nxSaPXkVGVCenWus7H2VC8SVWg",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/aulas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aulas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Aulas-GET(ID)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5OTIwNCwiZXhwIjoxNzg5NTAyODA0fQ.bRBoBdz5IBbMXR9M2nxSaPXkVGVCenWus7H2VC8SVWg",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/aulas/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aulas",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Aulas-POST",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5OTIwNCwiZXhwIjoxNzg5NTAyODA0fQ.bRBoBdz5IBbMXR9M2nxSaPXkVGVCenWus7H2VC8SVWg",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"Aula EV04\",\r\n    \"edificio\": \"Edificio Principal\",\r\n    \"capacidad\": 30,\r\n    \"tipo\": \"Académica\",\r\n    \"activa\": true,\r\n    \"departamento\": \"Boyacá\",\r\n    \"municipio\": \"Tunja\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/aulas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aulas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Aulas-PUT",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5OTIwNCwiZXhwIjoxNzg5NTAyODA0fQ.bRBoBdz5IBbMXR9M2nxSaPXkVGVCenWus7H2VC8SVWg",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"Aula EV04 Actualizada\",\r\n    \"edificio\": \"Edificio Principal\",\r\n    \"capacidad\": 35,\r\n    \"tipo\": \"Académica\",\r\n    \"activa\": true,\r\n    \"departamento\": \"Boyacá\",\r\n    \"municipio\": \"Tunja\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/aulas/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aulas",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Aulas-DELETE",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTQ5OTIwNCwiZXhwIjoxNzg5NTAyODA0fQ.bRBoBdz5IBbMXR9M2nxSaPXkVGVCenWus7H2VC8SVWg",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/aulas/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aulas",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Reservas",
+      "item": [
+        {
+          "name": "Reservas-DELETE",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTU4MTY3MiwiZXhwIjoxNzg5NTg1MjcyfQ.uDRSPWuWggtqp9vSc3z9hvDbgf4CugtNN4eSMoN0rvY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reservas/26",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reservas",
+                "26"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reservas-GET",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTU4MTY3MiwiZXhwIjoxNzg5NTg1MjcyfQ.uDRSPWuWggtqp9vSc3z9hvDbgf4CugtNN4eSMoN0rvY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reservas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reservas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reservas-GET(ID)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTU4MTY3MiwiZXhwIjoxNzg5NTg1MjcyfQ.uDRSPWuWggtqp9vSc3z9hvDbgf4CugtNN4eSMoN0rvY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reservas/10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reservas",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reservas-POST",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTU4MTY3MiwiZXhwIjoxNzg5NTg1MjcyfQ.uDRSPWuWggtqp9vSc3z9hvDbgf4CugtNN4eSMoN0rvY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombreSolicitante\": \"Emiliano Sanchez\",\r\n    \"fechaReserva\": \"2026-09-21\",\r\n    \"horaInicio\": \"10:00:00\",\r\n    \"horaFin\": \"12:00:00\",\r\n    \"estado\": \"Aprobada\",\r\n    \"sala\": {\r\n        \"idSala\": 15,\r\n        \"nombreSala\": \"Salón 204\",\r\n        \"tipoSala\": \"Aula\",\r\n        \"capacidad\": 25,\r\n        \"ubicacion\": \"Bloque C\",\r\n        \"disponible\": true\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/reservas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reservas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reservas-PUT",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXZhbkBnbWFpbC5jb20iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc4OTU4MTY3MiwiZXhwIjoxNzg5NTg1MjcyfQ.uDRSPWuWggtqp9vSc3z9hvDbgf4CugtNN4eSMoN0rvY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombreSolicitante\": \"Emiliano Sanchez Actualizado\",\r\n    \"fechaReserva\": \"2026-09-21\",\r\n    \"horaInicio\": \"12:00:00\",\r\n    \"horaFin\": \"14:00:00\",\r\n    \"estado\": \"Aprobada\",\r\n    \"sala\": {\r\n        \"idSala\": 15,\r\n        \"nombreSala\": \"Salón 204\",\r\n        \"tipoSala\": \"Aula\",\r\n        \"capacidad\": 25,\r\n        \"ubicacion\": \"Bloque C\",\r\n        \"disponible\": true\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/reservas/27",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reservas",
+                "27"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 - Servicios externos",
+      "item": [
+        {
+          "name": "GET - Usuarios Externos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/publica/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "publica",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "API Colombia: Departamentos-GET",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/publica/colombia/departamentos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "publica",
+                "colombia",
+                "departamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "API Colombia: Municipios-GET",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/publica/colombia/departamentos/5/municipios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "publica",
+                "colombia",
+                "departamentos",
+                "5",
+                "municipios"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
