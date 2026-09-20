@@ -1,112 +1,281 @@
-import { useState } from "react";
-import { guardarUsuario } from "../services/usuarioService";
+import { useEffect, useState } from "react";
 
-function FormularioUsuario({ onUsuarioGuardado }) {
+import {
+    guardarUsuario,
+    actualizarUsuario
+} from "../services/usuarioService";
+
+import {
+    exito,
+    error
+} from "../utils/alertas";
+
+
+function FormularioUsuario({
+    usuarioEditando,
+    onUsuarioGuardado,
+    onCancelarEdicion
+}) {
 
     const [nombre, setNombre] = useState("");
     const [correo, setCorreo] = useState("");
     const [password, setPassword] = useState("");
     const [rol, setRol] = useState("USUARIO");
 
-    const [mensaje, setMensaje] = useState("");
-    const [error, setError] = useState("");
+
+    // Cuando seleccionamos un usuario para editar,
+    // cargamos sus datos en el formulario.
+    useEffect(() => {
+
+        if (usuarioEditando) {
+
+            setNombre(usuarioEditando.nombre || "");
+            setCorreo(usuarioEditando.correo || "");
+            setPassword("");
+            setRol(usuarioEditando.rol || "USUARIO");
+
+        } else {
+
+            limpiarFormulario();
+
+        }
+
+    }, [usuarioEditando]);
+
+
+    function limpiarFormulario() {
+
+        setNombre("");
+        setCorreo("");
+        setPassword("");
+        setRol("USUARIO");
+
+    }
+
 
     async function manejarSubmit(e) {
 
         e.preventDefault();
 
-        setMensaje("");
-        setError("");
-
-        const usuario = {
-            nombre,
-            correo,
-            password,
-            rol
-        };
 
         try {
 
-            await guardarUsuario(usuario);
+            // ==========================================
+            // MODO EDITAR
+            // ==========================================
 
-            setMensaje("Usuario registrado correctamente.");
+            if (usuarioEditando) {
 
-            setNombre("");
-            setCorreo("");
-            setPassword("");
-            setRol("USUARIO");
+                const usuarioActualizado = {
+                    nombre,
+                    correo,
+                    rol
+                };
 
-            if (onUsuarioGuardado) {
-                onUsuarioGuardado();
+
+                // Si se escribió una contraseña,
+                // también la enviamos para actualizarla.
+                if (password.trim() !== "") {
+
+                    usuarioActualizado.password = password;
+
+                }
+
+
+                await actualizarUsuario(
+                    usuarioEditando.idUsuario,
+                    usuarioActualizado
+                );
+
+
+                exito(
+                    "Usuario actualizado correctamente."
+                );
+
             }
 
-        } catch (error) {
 
-            console.error(error);
-            setError("No se pudo registrar el usuario.");
+            // ==========================================
+            // MODO CREAR
+            // ==========================================
+
+            else {
+
+                const usuario = {
+                    nombre,
+                    correo,
+                    password,
+                    rol
+                };
+
+
+                await guardarUsuario(usuario);
+
+
+                exito(
+                    "Usuario registrado correctamente."
+                );
+
+            }
+
+
+            // Limpiar formulario
+            limpiarFormulario();
+
+
+            // Actualizar listado
+            if (onUsuarioGuardado) {
+
+                await onUsuarioGuardado();
+
+            }
+
+
+            // Salir del modo edición
+            if (usuarioEditando && onCancelarEdicion) {
+
+                onCancelarEdicion();
+
+            }
+
+
+        } catch (e) {
+
+            console.error(
+                "Error al guardar usuario:",
+                e
+            );
+
+
+            error(
+                usuarioEditando
+                    ? "No se pudo actualizar el usuario."
+                    : "No se pudo registrar el usuario."
+            );
+
         }
+
     }
 
+
     return (
+
         <form onSubmit={manejarSubmit}>
 
-            <h2>Registrar usuario</h2>
+            <h2>
+
+                {usuarioEditando
+                    ? "Editar usuario"
+                    : "Registrar usuario"
+                }
+
+            </h2>
+
 
             <div>
-                <label>Nombre:</label>
+
+                <label>
+                    Nombre:
+                </label>
 
                 <input
                     type="text"
                     value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
+                    onChange={(e) =>
+                        setNombre(e.target.value)
+                    }
                     required
                 />
+
             </div>
 
+
             <div>
-                <label>Correo:</label>
+
+                <label>
+                    Correo:
+                </label>
 
                 <input
                     type="email"
                     value={correo}
-                    onChange={(e) => setCorreo(e.target.value)}
+                    onChange={(e) =>
+                        setCorreo(e.target.value)
+                    }
                     required
                 />
+
             </div>
 
+
             <div>
-                <label>Contraseña:</label>
+
+                <label>
+                    Contraseña:
+                </label>
 
                 <input
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
+                    onChange={(e) =>
+                        setPassword(e.target.value)
+                    }
+                    required={!usuarioEditando}
+                    placeholder={
+                        usuarioEditando
+                            ? "Dejar vacío para conservar la actual"
+                            : ""
+                    }
                 />
+
             </div>
 
+
             <div>
-                <label>Rol:</label>
+
+                <label>
+                    Rol:
+                </label>
 
                 <select
                     value={rol}
-                    onChange={(e) => setRol(e.target.value)}
+                    onChange={(e) =>
+                        setRol(e.target.value)
+                    }
                 >
-                    <option value="USUARIO">USUARIO</option>
-                    <option value="ADMIN">ADMIN</option>
+
+                    <option value="USUARIO">
+                        USUARIO
+                    </option>
+
+                    <option value="ADMIN">
+                        ADMIN
+                    </option>
+
                 </select>
+
             </div>
 
+
             <button type="submit">
-                Registrar usuario
+
+                {usuarioEditando
+                    ? "Actualizar usuario"
+                    : "Registrar usuario"
+                }
+
             </button>
 
-            {mensaje && (
-                <p>{mensaje}</p>
-            )}
 
-            {error && (
-                <p>{error}</p>
+            {usuarioEditando && (
+
+                <button
+                    type="button"
+                    onClick={onCancelarEdicion}
+                >
+                    Cancelar
+                </button>
+
             )}
 
         </form>

@@ -6,6 +6,8 @@ import com.servigestor360.service.ReservaService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,46 +24,117 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
+
     /**
      * Obtiene el listado completo de reservas.
      */
     @GetMapping
     public List<Reserva> listarReservas() {
+
         return reservaService.listarReservas();
+
     }
+
 
     /**
      * Busca una reserva por su identificador.
      */
     @GetMapping("/{id}")
-    public Reserva buscarPorId(@PathVariable Integer id) {
+    public Reserva buscarPorId(
+            @PathVariable Integer id) {
+
         return reservaService.buscarPorId(id);
+
     }
+
 
     /**
      * Registra una nueva reserva.
      */
     @PostMapping
-    public Reserva guardarReserva(@Valid @RequestBody Reserva reserva) {
-        return reservaService.guardarReserva(reserva);
+    public ResponseEntity<?> guardarReserva(
+            @Valid @RequestBody Reserva reserva) {
+
+        try {
+
+            Reserva nuevaReserva =
+                    reservaService.guardarReserva(reserva);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(nuevaReserva);
+
+        } catch (IllegalStateException e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(e.getMessage());
+
+        } catch (IllegalArgumentException e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+
+        }
+
     }
+
 
     /**
      * Actualiza una reserva existente.
      */
     @PutMapping("/{id}")
-    public Reserva actualizarReserva(
+    public ResponseEntity<?> actualizarReserva(
             @PathVariable Integer id,
-            @RequestBody Reserva reserva) {
+            @Valid @RequestBody Reserva reserva) {
 
-        return reservaService.actualizarReserva(id, reserva);
+        try {
+
+            Reserva reservaActualizada =
+                    reservaService.actualizarReserva(
+                            id,
+                            reserva
+                    );
+
+            if (reservaActualizada == null) {
+
+                return ResponseEntity
+                        .notFound()
+                        .build();
+
+            }
+
+
+            return ResponseEntity
+                    .ok(reservaActualizada);
+
+        } catch (IllegalStateException e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(e.getMessage());
+
+        } catch (IllegalArgumentException e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+
+        }
+
     }
+
 
     /**
      * Elimina una reserva según su identificador.
      */
     @DeleteMapping("/{id}")
-    public void eliminarReserva(@PathVariable Integer id) {
+    public void eliminarReserva(
+            @PathVariable Integer id) {
+
         reservaService.eliminarReserva(id);
+
     }
+
 }

@@ -1,41 +1,34 @@
 import { useState, useEffect } from "react";
 import { guardarReserva, actualizarReserva } from "../services/reservaService";
 import { obtenerSalas } from "../services/salaService";
-import { exito, advertencia } from "../utils/alertas";
+import { exito, advertencia, error } from "../utils/alertas";
 import { FaSave, FaEdit } from "react-icons/fa";
-
 import "../styles/formulario.css";
 
 function FormularioReserva({ agregarReserva, reservaEditar }) {
 
-    // Estados del formulario
     const [nombreSolicitante, setNombreSolicitante] = useState("");
     const [fechaReserva, setFechaReserva] = useState("");
     const [horaInicio, setHoraInicio] = useState("");
     const [horaFin, setHoraFin] = useState("");
     const [estado, setEstado] = useState("Pendiente");
     const [idSala, setIdSala] = useState("");
-
-    // Lista de salas disponibles
     const [salas, setSalas] = useState([]);
 
-    // Cargar las salas cuando el componente inicia
     useEffect(() => {
-
         cargarSalas();
-
     }, []);
 
-    // Obtener las salas desde el backend
     async function cargarSalas() {
-
-        const datos = await obtenerSalas();
-
-        setSalas(datos);
-
+        try {
+            const datos = await obtenerSalas();
+            setSalas(datos);
+        } catch (e) {
+            console.error("Error al cargar las salas:", e);
+            error("No se pudieron cargar las salas.");
+        }
     }
 
-    // Cargar los datos de la reserva cuando se selecciona para editar
     useEffect(() => {
 
         if (reservaEditar) {
@@ -45,132 +38,138 @@ function FormularioReserva({ agregarReserva, reservaEditar }) {
             setHoraInicio(reservaEditar.horaInicio);
             setHoraFin(reservaEditar.horaFin);
             setEstado(reservaEditar.estado);
-            setIdSala(reservaEditar.sala.idSala);
-
+            setIdSala(reservaEditar.sala?.idSala || "");
         }
 
     }, [reservaEditar]);
 
-    // Guardar o actualizar una reserva
     async function guardarReservaFormulario(e) {
 
         e.preventDefault();
 
-        // Validaciones del formulario
+        // ==============================
+        // VALIDACIONES DEL FORMULARIO
+        // ==============================
 
         if (nombreSolicitante.trim() === "") {
-
-            advertencia("Ingrese el nombre del solicitante");
+            advertencia("Ingrese el nombre del solicitante.");
             return;
-
         }
 
         if (fechaReserva === "") {
-
-            advertencia("Seleccione una fecha");
+            advertencia("Seleccione una fecha.");
             return;
-
         }
 
         if (horaInicio === "") {
-
-            advertencia("Seleccione la hora de inicio");
+            advertencia("Seleccione la hora de inicio.");
             return;
-
         }
 
         if (horaFin === "") {
-
-            advertencia("Seleccione la hora de fin");
+            advertencia("Seleccione la hora de fin.");
             return;
-
         }
 
         if (horaInicio >= horaFin) {
-
-            advertencia("La hora de fin debe ser mayor que la hora de inicio");
+            advertencia("La hora de fin debe ser mayor que la hora de inicio.");
             return;
-
         }
 
         if (estado === "") {
-
-            advertencia("Seleccione un estado");
+            advertencia("Seleccione un estado.");
             return;
-
         }
 
         if (idSala === "") {
-
-            advertencia("Seleccione una sala");
+            advertencia("Seleccione una sala.");
             return;
-
         }
 
-        // Crear el objeto que será enviado al backend
+        // ==============================
+        // OBJETO DE LA RESERVA
+        // ==============================
+
         const nuevaReserva = {
-
             nombreSolicitante,
-
             fechaReserva,
-
             horaInicio,
-
             horaFin,
-
             estado,
-
             sala: {
-
                 idSala: Number(idSala)
-
             }
-
         };
 
-        // Verificar si la operación corresponde a editar o registrar
-        if (reservaEditar) {
+        // ==============================
+        // GUARDAR O ACTUALIZAR
+        // ==============================
 
-            const reservaActualizada = await actualizarReserva(
+        try {
 
-                reservaEditar.idReserva,
+            if (reservaEditar) {
 
-                nuevaReserva
+                const reservaActualizada = await actualizarReserva(
+                    reservaEditar.idReserva,
+                    nuevaReserva
+                );
 
+                await agregarReserva(reservaActualizada);
+
+                exito("Reserva actualizada correctamente.");
+
+            } else {
+
+                const reservaGuardada = await guardarReserva(nuevaReserva);
+
+                await agregarReserva(reservaGuardada);
+
+                exito("Reserva guardada correctamente.");
+            }
+
+            // ==============================
+            // LIMPIAR FORMULARIO
+            // ==============================
+
+            setNombreSolicitante("");
+            setFechaReserva("");
+            setHoraInicio("");
+            setHoraFin("");
+            setEstado("Pendiente");
+            setIdSala("");
+
+        } catch (e) {
+
+            console.error("Error al guardar la reserva:", e);
+
+            // ==============================
+            // RESERVA DUPLICADA / HORARIO OCUPADO
+            // ==============================
+
+            if (e.message.includes("sala ya tiene una reserva")) {
+
+                advertencia(
+                    "La sala ya tiene una reserva en ese horario. Seleccione otro horario."
+                );
+
+                return;
+            }
+
+            // ==============================
+            // OTROS ERRORES
+            // ==============================
+
+            error(
+                "No se pudo guardar la reserva. Verifique los datos e inténtelo nuevamente."
             );
-
-            agregarReserva(reservaActualizada);
-
-            exito("Reserva actualizada correctamente.");
-
-        } else {
-
-            const reservaGuardada = await guardarReserva(nuevaReserva);
-
-            agregarReserva(reservaGuardada);
-
-            exito("Reserva guardada correctamente.");
-
         }
-
-        // Limpiar el formulario
-        setNombreSolicitante("");
-        setFechaReserva("");
-        setHoraInicio("");
-        setHoraFin("");
-        setEstado("Pendiente");
-        setIdSala("");
-
     }
 
     return (
-
         <form className="formulario" onSubmit={guardarReservaFormulario}>
 
             <h3>
-
                 {reservaEditar ? "Editar Reserva" : "Registrar Reserva"}
-
             </h3>
 
             <input
@@ -202,33 +201,27 @@ function FormularioReserva({ agregarReserva, reservaEditar }) {
                 value={estado}
                 onChange={(e) => setEstado(e.target.value)}
             >
-
                 <option value="Pendiente">Pendiente</option>
                 <option value="Aprobada">Aprobada</option>
                 <option value="Rechazada">Rechazada</option>
-
             </select>
 
             <select
                 value={idSala}
                 onChange={(e) => setIdSala(e.target.value)}
             >
-
-                <option value="">Seleccione una sala</option>
+                <option value="">
+                    Seleccione una sala
+                </option>
 
                 {salas.map((sala) => (
-
                     <option
                         key={sala.idSala}
                         value={sala.idSala}
                     >
-
                         {sala.nombreSala}
-
                     </option>
-
                 ))}
-
             </select>
 
             <button type="submit">
@@ -246,9 +239,7 @@ function FormularioReserva({ agregarReserva, reservaEditar }) {
             </button>
 
         </form>
-
     );
-
 }
 
 export default FormularioReserva;

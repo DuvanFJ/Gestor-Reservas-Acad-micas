@@ -417,3 +417,23 @@
     }
 
 }
+
+/* Barra de búsqueda de usuarios */
+
+.usuarios-busqueda {
+    margin: 20px 0;
+}
+
+.usuarios-busqueda input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.usuarios-busqueda input:focus {
+    outline: none;
+    border-color: #555;
+}

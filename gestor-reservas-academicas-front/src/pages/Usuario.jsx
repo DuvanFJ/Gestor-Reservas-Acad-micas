@@ -19,6 +19,12 @@ function Usuario() {
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState("");
 
+    // Texto utilizado para buscar usuarios
+    const [busqueda, setBusqueda] = useState("");
+
+    // Usuario que se está editando
+    const [usuarioEditando, setUsuarioEditando] = useState(null);
+
     useEffect(() => {
         cargarUsuarios();
     }, []);
@@ -32,20 +38,71 @@ function Usuario() {
 
             const datos = await obtenerUsuarios();
 
-            setUsuarios(datos);
+            // Verificamos que realmente recibimos una lista
+            if (Array.isArray(datos)) {
+                setUsuarios(datos);
+            } else {
+                setUsuarios([]);
+                setError("El servidor no devolvió una lista de usuarios.");
+            }
 
         } catch (error) {
 
-            console.error(error);
+            console.error("Error al cargar usuarios:", error);
 
             setError(
-                "No se pudieron cargar los usuarios."
+                "No se pudieron cargar los usuarios. Verifica que hayas iniciado sesión y que el backend esté funcionando."
             );
 
         } finally {
 
             setCargando(false);
         }
+    }
+
+    // Filtrar usuarios por nombre o correo
+    const usuariosFiltrados = usuarios.filter((usuario) => {
+
+        const texto = busqueda.trim().toLowerCase();
+
+        const nombre = usuario.nombre
+            ? usuario.nombre.toLowerCase()
+            : "";
+
+        const correo = usuario.correo
+            ? usuario.correo.toLowerCase()
+            : "";
+
+        return (
+            nombre.includes(texto) ||
+            correo.includes(texto)
+        );
+    });
+
+    // Se ejecuta cuando presionamos Editar
+    function manejarEditar(usuario) {
+
+        setUsuarioEditando(usuario);
+
+        // Lleva el formulario hacia la parte superior de la página
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+    // Se ejecuta cuando terminamos de guardar
+    async function manejarUsuarioGuardado() {
+
+        setUsuarioEditando(null);
+
+        await cargarUsuarios();
+    }
+
+    // Cancelar edición
+    function cancelarEdicion() {
+
+        setUsuarioEditando(null);
     }
 
     return (
@@ -81,7 +138,9 @@ function Usuario() {
                     <div className="usuarios-formulario">
 
                         <FormularioUsuario
-                            onUsuarioGuardado={cargarUsuarios}
+                            usuarioEditando={usuarioEditando}
+                            onUsuarioGuardado={manejarUsuarioGuardado}
+                            onCancelarEdicion={cancelarEdicion}
                         />
 
                     </div>
@@ -96,8 +155,22 @@ function Usuario() {
                             </h2>
 
                             <span>
-                                {usuarios.length} usuario(s)
+                                {usuariosFiltrados.length} usuario(s)
                             </span>
+
+                        </div>
+
+
+                        {/* Barra de búsqueda */}
+
+                        <div className="usuarios-busqueda">
+
+                            <input
+                                type="text"
+                                placeholder="Buscar por nombre o correo..."
+                                value={busqueda}
+                                onChange={(e) => setBusqueda(e.target.value)}
+                            />
 
                         </div>
 
@@ -118,16 +191,18 @@ function Usuario() {
 
                         {!cargando && !error && (
 
-                            usuarios.length === 0 ? (
+                            usuariosFiltrados.length === 0 ? (
 
                                 <p className="usuarios-mensaje">
-                                    No hay usuarios registrados.
+                                    No se encontraron usuarios.
                                 </p>
 
                             ) : (
 
                                 <UsuarioTable
-                                    usuarios={usuarios}
+                                    usuarios={usuariosFiltrados}
+                                    onEditar={manejarEditar}
+                                    onUsuarioEliminado={cargarUsuarios}
                                 />
 
                             )
