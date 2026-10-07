@@ -25,133 +25,250 @@ import "../styles/pagina.css";
 
 function ReservaPage() {
 
-    // Lista de reservas
+    // ==========================================
+    // ESTADOS
+    // ==========================================
+
     const [reservas, setReservas] = useState([]);
 
-    // Reserva seleccionada para editar
     const [reservaEditar, setReservaEditar] = useState(null);
 
-    // Texto del buscador
     const [busqueda, setBusqueda] = useState("");
 
-    // Cargar reservas al iniciar la página
+    // ==========================================
+    // OBTENER ROL DEL USUARIO
+    // ==========================================
+
+    function obtenerRolUsuario() {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return "";
+        }
+
+        try {
+
+            const partes = token.split(".");
+
+            if (partes.length !== 3) {
+                return "";
+            }
+
+            const payload = JSON.parse(
+                atob(partes[1])
+            );
+
+            return payload.rol || "";
+
+        } catch (e) {
+
+            console.error(
+                "No se pudo obtener el rol:",
+                e
+            );
+
+            return "";
+        }
+    }
+
+    const rolUsuario = obtenerRolUsuario();
+
+    const esAdmin = rolUsuario === "ADMIN";
+
+    // ==========================================
+    // CARGAR RESERVAS
+    // ==========================================
+
     useEffect(() => {
 
         cargarReservas();
 
     }, []);
 
-    // Obtener todas las reservas desde el backend
     async function cargarReservas() {
 
-        const datos = await obtenerReservas();
+        try {
 
-        setReservas(datos);
+            const datos = await obtenerReservas();
 
+            setReservas(datos);
+
+        } catch (e) {
+
+            console.error(
+                "Error al cargar las reservas:",
+                e
+            );
+        }
     }
 
-    // Actualizar la tabla después de guardar o editar
+    // ==========================================
+    // ACTUALIZAR TABLA DESPUÉS DE GUARDAR
+    // ==========================================
+
     async function agregarReserva() {
 
         await cargarReservas();
 
-        // Salir del modo edición
         setReservaEditar(null);
 
     }
 
-    // Enviar la reserva seleccionada al formulario
+    // ==========================================
+    // EDITAR RESERVA
+    // ==========================================
+
     function editarReserva(reserva) {
 
         setReservaEditar(reserva);
 
     }
 
-    // Eliminar una reserva
+    // ==========================================
+    // ELIMINAR RESERVA
+    // ==========================================
+
     async function borrarReserva(id) {
 
-        const ok = await confirmar("Esta reserva será eliminada.");
+        const ok = await confirmar(
+            "Esta reserva será eliminada."
+        );
 
         if (!ok) return;
 
-        await eliminarReserva(id);
+        try {
 
-        setReservas(
+            await eliminarReserva(id);
 
-            reservas.filter(r => r.idReserva !== id)
+            setReservas(
+                reservas.filter(
+                    r => r.idReserva !== id
+                )
+            );
 
-        );
+            exito(
+                "Reserva eliminada correctamente."
+            );
 
-        exito("Reserva eliminada correctamente.");
+        } catch (e) {
 
+            console.error(
+                "Error al eliminar la reserva:",
+                e
+            );
+        }
     }
 
-    // Filtrar reservas según el texto ingresado
-    const reservasFiltradas = reservas.filter((reserva) =>
+    // ==========================================
+    // BUSCADOR
+    // ==========================================
 
-        reserva.nombreSolicitante
-            .toLowerCase()
-            .includes(busqueda.toLowerCase()) ||
+    const reservasFiltradas = reservas.filter(
+        (reserva) =>
 
-        reserva.estado
-            .toLowerCase()
-            .includes(busqueda.toLowerCase()) ||
-
-        (reserva.sala &&
-            reserva.sala.nombreSala
+            reserva.nombreSolicitante
                 .toLowerCase()
-                .includes(busqueda.toLowerCase()))
+                .includes(
+                    busqueda.toLowerCase()
+                ) ||
 
+            reserva.estado
+                .toLowerCase()
+                .includes(
+                    busqueda.toLowerCase()
+                ) ||
+
+            (
+                reserva.sala &&
+                reserva.sala.nombreSala
+                    .toLowerCase()
+                    .includes(
+                        busqueda.toLowerCase()
+                    )
+            )
     );
+
+    // ==========================================
+    // INTERFAZ
+    // ==========================================
 
     return (
 
         <>
 
             {/* Encabezado */}
+
             <Header />
 
-            {/* Menú de navegación */}
+            {/* Menú */}
+
             <Navbar />
 
             <div className="contenido">
 
                 <h2>
-                    <FaCalendarCheck style={{ marginRight: "8px" }} />
-                    Gestión de Reservas
+
+                    <FaCalendarCheck
+                        style={{
+                            marginRight: "8px"
+                        }}
+                    />
+
+                    {esAdmin
+                        ? "Gestión de Reservas"
+                        : "Mis Reservas"}
+
                 </h2>
 
                 {/* Buscador */}
+
                 <input
                     className="buscador"
                     type="text"
                     placeholder="🔎 Buscar..."
                     value={busqueda}
-                    onChange={(e) => setBusqueda(e.target.value)}
+                    onChange={(e) =>
+                        setBusqueda(
+                            e.target.value
+                        )
+                    }
                 />
 
                 {/* Formulario */}
+
                 <FormularioReserva
-                    agregarReserva={agregarReserva}
-                    reservaEditar={reservaEditar}
+                    agregarReserva={
+                        agregarReserva
+                    }
+                    reservaEditar={
+                        reservaEditar
+                    }
                 />
 
                 {/* Tabla */}
+
                 <TablaReserva
-                    reservas={reservasFiltradas}
-                    editarReserva={editarReserva}
-                    borrarReserva={borrarReserva}
+                    reservas={
+                        reservasFiltradas
+                    }
+                    editarReserva={
+                        editarReserva
+                    }
+                    borrarReserva={
+                        borrarReserva
+                    }
                 />
 
             </div>
 
             {/* Pie de página */}
+
             <Footer />
 
         </>
 
     );
-
 }
 
 export default ReservaPage;

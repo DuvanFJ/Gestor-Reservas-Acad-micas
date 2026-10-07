@@ -20,107 +20,266 @@ public class ReservaService {
 
 
     /**
-     * Obtiene todas las reservas registradas.
+     * Obtiene las reservas según el rol del usuario.
+     *
+     * ADMIN:
+     * Puede consultar todas las reservas.
+     *
+     * USUARIO:
+     * Solamente puede consultar sus propias reservas.
      */
-    public List<Reserva> listarReservas() {
+    public List<Reserva> listarReservas(
+            String correoUsuario,
+            boolean esAdmin) {
 
-        return reservaRepository.findAll();
+        if (esAdmin) {
+            return reservaRepository.findAll();
+        }
 
+        return reservaRepository
+                .findByCorreoSolicitante(correoUsuario);
+    }
+
+
+    /**
+     * Busca una reserva por ID.
+     *
+     * ADMIN:
+     * Puede consultar cualquier reserva.
+     *
+     * USUARIO:
+     * Solamente puede consultar una reserva propia.
+     */
+    public Reserva buscarPorId(
+            Integer id,
+            String correoUsuario,
+            boolean esAdmin) {
+
+        if (esAdmin) {
+
+            return reservaRepository
+                    .findById(id)
+                    .orElse(null);
+        }
+
+        return reservaRepository
+                .findByIdReservaAndCorreoSolicitante(
+                        id,
+                        correoUsuario
+                )
+                .orElse(null);
     }
 
 
     /**
      * Guarda una nueva reserva.
      *
-     * Antes de guardar se verifica que la sala
-     * no tenga otra reserva que se cruce
-     * con la fecha y horario solicitados.
+     * El correo del propietario se obtiene del JWT.
+     *
+     * El estado siempre se establece como PENDIENTE
+     * al crear una nueva reserva.
      */
-    public Reserva guardarReserva(Reserva reserva) {
+    public Reserva guardarReserva(
+            Reserva reserva,
+            String correoUsuario) {
+
+        // El propietario se establece desde el usuario autenticado.
+        reserva.setCorreoSolicitante(correoUsuario);
+
+        // Toda nueva reserva comienza pendiente.
+        reserva.setEstado("Pendiente");
+
+        validarHorario(reserva);
 
         validarDisponibilidad(reserva, null);
 
         return reservaRepository.save(reserva);
-
     }
 
 
     /**
-     * Busca una reserva por su identificador.
-     */
-    public Reserva buscarPorId(Integer id) {
-
-        return reservaRepository
-                .findById(id)
-                .orElse(null);
-
-    }
-
-
-    /**
-     * Actualiza la información de una reserva existente.
+     * Actualiza una reserva existente.
      *
-     * También se verifica que la nueva fecha y horario
-     * no entren en conflicto con otra reserva.
+     * ADMIN:
+     * Puede modificar cualquier reserva y su estado.
+     *
+     * USUARIO:
+     * Solamente puede modificar una reserva propia.
+     * No puede cambiar su estado.
      */
     public Reserva actualizarReserva(
             Integer id,
-            Reserva reservaActualizada) {
+            Reserva reservaActualizada,
+            String correoUsuario,
+            boolean esAdmin) {
 
-        Reserva reserva = reservaRepository
-                .findById(id)
-                .orElse(null);
+        Reserva reserva;
 
+        if (esAdmin) {
 
-        if (reserva != null) {
+            reserva = reservaRepository
+                    .findById(id)
+                    .orElse(null);
 
-            validarDisponibilidad(
-                    reservaActualizada,
-                    id
-            );
+        } else {
 
-
-            reserva.setNombreSolicitante(
-                    reservaActualizada.getNombreSolicitante()
-            );
-
-            reserva.setFechaReserva(
-                    reservaActualizada.getFechaReserva()
-            );
-
-            reserva.setHoraInicio(
-                    reservaActualizada.getHoraInicio()
-            );
-
-            reserva.setHoraFin(
-                    reservaActualizada.getHoraFin()
-            );
-
-            reserva.setEstado(
-                    reservaActualizada.getEstado()
-            );
-
-            reserva.setSala(
-                    reservaActualizada.getSala()
-            );
+            reserva = reservaRepository
+                    .findByIdReservaAndCorreoSolicitante(
+                            id,
+                            correoUsuario
+                    )
+                    .orElse(null);
+        }
 
 
-            return reservaRepository.save(reserva);
+        if (reserva == null) {
+            return null;
+        }
+
+
+        // Validar horario.
+        validarHorario(reservaActualizada);
+
+        // Validar que la sala no tenga conflicto.
+        validarDisponibilidad(
+                reservaActualizada,
+                id
+        );
+
+
+        // ==========================================
+        // ACTUALIZAR DATOS DE LA RESERVA
+        // ==========================================
+
+        reserva.setNombreSolicitante(
+                reservaActualizada.getNombreSolicitante()
+        );
+
+        reserva.setFechaReserva(
+                reservaActualizada.getFechaReserva()
+        );
+
+        reserva.setHoraInicio(
+                reservaActualizada.getHoraInicio()
+        );
+
+        reserva.setHoraFin(
+                reservaActualizada.getHoraFin()
+        );
+
+        reserva.setSala(
+                reservaActualizada.getSala()
+        );
+
+
+        /*
+         * El correo NO se toma del frontend.
+         *
+         * Si es USUARIO, conserva su propietario.
+         *
+         * Si es ADMIN, conserva el propietario original
+         * de la reserva.
+         */
+        if (reserva.getCorreoSolicitante() == null ||
+                reserva.getCorreoSolicitante().isBlank()) {
+
+            reserva.setCorreoSolicitante(correoUsuario);
+        }
+
+
+        /*
+         * Solamente ADMIN puede cambiar el estado.
+         */
+        if (esAdmin) {
+
+            if (reservaActualizada.getEstado() != null &&
+                    !reservaActualizada.getEstado().isBlank()) {
+
+                reserva.setEstado(
+                        reservaActualizada.getEstado()
+                );
+            }
 
         }
 
 
-        return null;
+        /*
+         * USUARIO no puede cambiar el estado.
+         *
+         * Si la reserva estaba Pendiente, permanece Pendiente.
+         * Si estaba Aprobada o Rechazada, permanece con ese estado.
+         */
+        return reservaRepository.save(reserva);
     }
 
 
     /**
-     * Elimina una reserva por su identificador.
+     * Elimina una reserva.
+     *
+     * ADMIN:
+     * Puede eliminar cualquier reserva.
+     *
+     * USUARIO:
+     * Solamente puede eliminar una reserva propia.
      */
-    public void eliminarReserva(Integer id) {
+    public boolean eliminarReserva(
+            Integer id,
+            String correoUsuario,
+            boolean esAdmin) {
 
-        reservaRepository.deleteById(id);
+        Reserva reserva;
 
+        if (esAdmin) {
+
+            reserva = reservaRepository
+                    .findById(id)
+                    .orElse(null);
+
+        } else {
+
+            reserva = reservaRepository
+                    .findByIdReservaAndCorreoSolicitante(
+                            id,
+                            correoUsuario
+                    )
+                    .orElse(null);
+        }
+
+
+        if (reserva == null) {
+            return false;
+        }
+
+
+        reservaRepository.delete(reserva);
+
+        return true;
+    }
+
+
+    /**
+     * Valida que la hora de inicio sea anterior
+     * a la hora de finalización.
+     */
+    private void validarHorario(Reserva reserva) {
+
+        if (reserva.getHoraInicio() == null ||
+                reserva.getHoraFin() == null) {
+
+            throw new IllegalArgumentException(
+                    "La hora de inicio y la hora de fin son obligatorias."
+            );
+        }
+
+
+        if (!reserva.getHoraInicio()
+                .isBefore(reserva.getHoraFin())) {
+
+            throw new IllegalArgumentException(
+                    "La hora de inicio debe ser anterior "
+                    + "a la hora de fin."
+            );
+        }
     }
 
 
@@ -144,7 +303,6 @@ public class ReservaService {
             throw new IllegalArgumentException(
                     "La sala es obligatoria."
             );
-
         }
 
 
@@ -169,7 +327,6 @@ public class ReservaService {
                             .equals(idReservaActual)) {
 
                 continue;
-
             }
 
 
@@ -177,9 +334,6 @@ public class ReservaService {
                     "La sala ya tiene una reserva "
                     + "en ese horario."
             );
-
         }
-
     }
-
 }

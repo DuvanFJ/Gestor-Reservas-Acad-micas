@@ -3,6 +3,7 @@ package com.servigestor360.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,6 +22,9 @@ public class Reserva {
     // Nombre de la persona que realiza la reserva
     @NotBlank(message = "El nombre del solicitante es obligatorio")
     private String nombreSolicitante;
+
+    // Correo del usuario propietario de la reserva
+    private String correoSolicitante;
 
     // Fecha en la que se realizará la reserva
     @NotNull(message = "La fecha de reserva es obligatoria")
@@ -47,7 +51,9 @@ public class Reserva {
     public Reserva() {
     }
 
-    // Métodos Getters y Setters
+    // ==============================
+    // GETTERS Y SETTERS
+    // ==============================
 
     public Integer getIdReserva() {
         return idReserva;
@@ -63,6 +69,14 @@ public class Reserva {
 
     public void setNombreSolicitante(String nombreSolicitante) {
         this.nombreSolicitante = nombreSolicitante;
+    }
+
+    public String getCorreoSolicitante() {
+        return correoSolicitante;
+    }
+
+    public void setCorreoSolicitante(String correoSolicitante) {
+        this.correoSolicitante = correoSolicitante;
     }
 
     public LocalDate getFechaReserva() {

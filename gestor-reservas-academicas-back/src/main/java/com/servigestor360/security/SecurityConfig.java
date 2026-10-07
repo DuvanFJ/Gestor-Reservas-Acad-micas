@@ -13,7 +13,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
 import java.util.List;
 
 @Configuration
@@ -26,65 +25,222 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http) throws Exception {
 
         http
-                // Habilitar CORS
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors ->
+                        cors.configurationSource(
+                                corsConfigurationSource()
+                        )
+                )
 
-                // Desactivar CSRF porque utilizamos JWT
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf ->
+                        csrf.disable()
+                )
 
-                // No utilizar sesiones
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
+                )
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // Permitir las peticiones OPTIONS del navegador
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // ==========================================
+                        // CORS
+                        // ==========================================
 
-                        // Login público
-                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers(
+                                HttpMethod.OPTIONS,
+                                "/**"
+                        ).permitAll()
 
-                        // API pública
-                        .requestMatchers("/api/publica/**").permitAll()
 
-                        // Todo lo demás requiere JWT
-                        .anyRequest().authenticated())
+                        // ==========================================
+                        // AUTENTICACIÓN
+                        // ==========================================
 
-                // Filtro JWT
+                        .requestMatchers(
+                                "/api/auth/login"
+                        ).permitAll()
+
+
+                        // ==========================================
+                        // APIs PÚBLICAS
+                        // ==========================================
+
+                        .requestMatchers(
+                                "/api/publica/**"
+                        ).permitAll()
+
+
+                        // ==========================================
+                        // USUARIOS
+                        // ==========================================
+
+                        .requestMatchers(
+                                "/api/usuarios/**"
+                        ).hasRole("ADMIN")
+
+
+                        // ==========================================
+                        // SALAS
+                        // ==========================================
+
+                        // ADMIN y USUARIO pueden consultar salas.
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/salas/**"
+                        ).hasAnyRole("ADMIN", "USUARIO")
+
+                        // Solo ADMIN puede crear salas.
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/salas/**"
+                        ).hasRole("ADMIN")
+
+                        // Solo ADMIN puede actualizar salas.
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/salas/**"
+                        ).hasRole("ADMIN")
+
+                        // Solo ADMIN puede eliminar salas.
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/salas/**"
+                        ).hasRole("ADMIN")
+
+
+                        // ==========================================
+                        // AULAS
+                        // ==========================================
+
+                        // ADMIN y USUARIO pueden consultar aulas.
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/aulas/**"
+                        ).hasAnyRole("ADMIN", "USUARIO")
+
+                        // Solo ADMIN puede crear aulas.
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/aulas/**"
+                        ).hasRole("ADMIN")
+
+                        // Solo ADMIN puede actualizar aulas.
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/aulas/**"
+                        ).hasRole("ADMIN")
+
+                        // Solo ADMIN puede eliminar aulas.
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/aulas/**"
+                        ).hasRole("ADMIN")
+
+
+                        // ==========================================
+                        // RESERVAS
+                        // ==========================================
+
+                        // ADMIN y USUARIO pueden consultar reservas.
+                        //
+                        // El filtrado de las reservas propias
+                        // se realiza en ReservaService.
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/reservas/**"
+                        ).hasAnyRole("ADMIN", "USUARIO")
+
+                        // ADMIN y USUARIO pueden crear reservas.
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/reservas/**"
+                        ).hasAnyRole("ADMIN", "USUARIO")
+
+                        // ADMIN y USUARIO pueden actualizar reservas.
+                        //
+                        // ReservaService verifica que el USUARIO
+                        // solamente pueda modificar las propias.
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/reservas/**"
+                        ).hasAnyRole("ADMIN", "USUARIO")
+
+                        // ADMIN y USUARIO pueden eliminar reservas.
+                        //
+                        // ReservaService verifica la propiedad.
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/reservas/**"
+                        ).hasAnyRole("ADMIN", "USUARIO")
+
+
+                        // ==========================================
+                        // RESTO DE ENDPOINTS
+                        // ==========================================
+
+                        .anyRequest().authenticated()
+                )
+
                 .addFilterBefore(
                         jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration configuration =
+                new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-                List.of("http://localhost:5173"));
+                List.of(
+                        "http://localhost:5173"
+                )
+        );
 
         configuration.setAllowedMethods(
-                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
 
         configuration.setAllowedHeaders(
-                List.of("Authorization", "Content-Type"));
+                List.of(
+                        "Authorization",
+                        "Content-Type"
+                )
+        );
 
         configuration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
 
         return source;
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 }

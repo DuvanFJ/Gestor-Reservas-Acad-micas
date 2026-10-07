@@ -20,6 +20,51 @@ function Navbar() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    // ==========================================
+    // OBTENER ROL DEL USUARIO DESDE EL JWT
+    // ==========================================
+
+    function obtenerRolUsuario() {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return "";
+        }
+
+        try {
+
+            const partes = token.split(".");
+
+            if (partes.length !== 3) {
+                return "";
+            }
+
+            const payload = JSON.parse(
+                atob(partes[1])
+            );
+
+            return payload.rol || "";
+
+        } catch (e) {
+
+            console.error(
+                "No se pudo obtener el rol del usuario:",
+                e
+            );
+
+            return "";
+        }
+    }
+
+    const rolUsuario = obtenerRolUsuario();
+
+    const esAdmin = rolUsuario === "ADMIN";
+
+    // ==========================================
+    // CERRAR SESIÓN
+    // ==========================================
+
     function cerrarSesion() {
 
         localStorage.removeItem("token");
@@ -31,7 +76,9 @@ function Navbar() {
 
         <nav className="navbar">
 
-            {/* Inicio */}
+            {/* ==================================
+                INICIO
+                ================================== */}
 
             <Link
                 to="/"
@@ -46,7 +93,10 @@ function Navbar() {
             </Link>
 
 
-            {/* Salas */}
+            {/* ==================================
+                SALAS
+                ADMIN Y USUARIO
+                ================================== */}
 
             <Link
                 to="/salas"
@@ -61,7 +111,10 @@ function Navbar() {
             </Link>
 
 
-            {/* Aulas */}
+            {/* ==================================
+                AULAS
+                ADMIN Y USUARIO
+                ================================== */}
 
             <Link
                 to="/aulas"
@@ -76,7 +129,10 @@ function Navbar() {
             </Link>
 
 
-            {/* Reservas */}
+            {/* ==================================
+                RESERVAS
+                ADMIN Y USUARIO
+                ================================== */}
 
             <Link
                 to="/reservas"
@@ -91,22 +147,31 @@ function Navbar() {
             </Link>
 
 
-            {/* Usuarios */}
+            {/* ==================================
+                USUARIOS
+                SOLO ADMIN
+                ================================== */}
 
-            <Link
-                to="/usuarios"
-                className={
-                    location.pathname === "/usuarios"
-                        ? "activo"
-                        : ""
-                }
-            >
-                <FaUsers />
-                <span>Usuarios</span>
-            </Link>
+            {esAdmin && (
+
+                <Link
+                    to="/usuarios"
+                    className={
+                        location.pathname === "/usuarios"
+                            ? "activo"
+                            : ""
+                    }
+                >
+                    <FaUsers />
+                    <span>Usuarios</span>
+                </Link>
+
+            )}
 
 
-            {/* Cerrar sesión */}
+            {/* ==================================
+                CERRAR SESIÓN
+                ================================== */}
 
             <button
                 type="button"

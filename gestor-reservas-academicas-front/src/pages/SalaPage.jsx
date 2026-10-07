@@ -1,26 +1,20 @@
-// Componentes
 import Header from "../components/Header";
 import FormularioSala from "../components/FormularioSala";
 import TablaSala from "../components/TablaSala";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// Hooks de React
 import { useState, useEffect } from "react";
 
-// Alertas personalizadas
 import { exito, confirmar } from "../utils/alertas";
 
-// Icono del título
 import { FaDoorOpen } from "react-icons/fa";
 
-// Servicios para consumir la API
 import {
     obtenerSalas,
     eliminarSala
 } from "../services/salaService";
 
-// Estilos
 import "../styles/pagina.css";
 
 function SalaPage() {
@@ -29,6 +23,44 @@ function SalaPage() {
     const [salas, setSalas] = useState([]);
     const [salaEditar, setSalaEditar] = useState(null);
     const [busqueda, setBusqueda] = useState("");
+
+    // Obtener el rol del usuario desde el JWT
+    function obtenerRolUsuario() {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return null;
+        }
+
+        try {
+
+            const partes = token.split(".");
+
+            if (partes.length !== 3) {
+                return null;
+            }
+
+            const payload = JSON.parse(
+                atob(partes[1])
+            );
+
+            return payload.rol;
+
+        } catch (error) {
+
+            console.error(
+                "No se pudo obtener el rol del usuario:",
+                error
+            );
+
+            return null;
+        }
+    }
+
+    const rolUsuario = obtenerRolUsuario();
+
+    const esAdmin = rolUsuario === "ADMIN";
 
     // Al iniciar la página se cargan las salas registradas
     useEffect(() => {
@@ -40,16 +72,28 @@ function SalaPage() {
     // Consulta las salas desde la API
     async function cargarSalas() {
 
-        const datos = await obtenerSalas();
+        try {
 
-        setSalas(datos);
+            const datos = await obtenerSalas();
 
+            setSalas(datos);
+
+        } catch (error) {
+
+            console.error(
+                "Error al cargar las salas:",
+                error
+            );
+
+        }
     }
 
     // Agrega una nueva sala o actualiza una existente
     function agregarSala(sala) {
 
-        const existe = salas.find(s => s.idSala === sala.idSala);
+        const existe = salas.find(
+            s => s.idSala === sala.idSala
+        );
 
         if (existe) {
 
@@ -57,7 +101,9 @@ function SalaPage() {
 
                 salas.map(s =>
 
-                    s.idSala === sala.idSala ? sala : s
+                    s.idSala === sala.idSala
+                        ? sala
+                        : s
 
                 )
 
@@ -65,10 +111,12 @@ function SalaPage() {
 
         } else {
 
-            setSalas([...salas, sala]);
+            setSalas([
+                ...salas,
+                sala
+            ]);
 
         }
-
     }
 
     // Envía la sala seleccionada al formulario
@@ -81,30 +129,58 @@ function SalaPage() {
     // Elimina una sala después de confirmación
     async function borrarSala(id) {
 
-        const ok = await confirmar("Esta sala será eliminada.");
+        const ok = await confirmar(
+            "Esta sala será eliminada."
+        );
 
         if (!ok) return;
 
-        await eliminarSala(id);
+        try {
 
-        setSalas(
+            await eliminarSala(id);
 
-            salas.filter(s => s.idSala !== id)
+            setSalas(
 
-        );
+                salas.filter(
+                    s => s.idSala !== id
+                )
 
-        exito("Sala eliminada correctamente.");
+            );
 
+            exito(
+                "Sala eliminada correctamente."
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Error al eliminar la sala:",
+                error
+            );
+
+        }
     }
 
     // Filtrado por nombre, tipo o ubicación
     const salasFiltradas = salas.filter((sala) =>
 
-        sala.nombreSala.toLowerCase().includes(busqueda.toLowerCase()) ||
+        sala.nombreSala
+            .toLowerCase()
+            .includes(
+                busqueda.toLowerCase()
+            ) ||
 
-        sala.tipoSala.toLowerCase().includes(busqueda.toLowerCase()) ||
+        sala.tipoSala
+            .toLowerCase()
+            .includes(
+                busqueda.toLowerCase()
+            ) ||
 
-        sala.ubicacion.toLowerCase().includes(busqueda.toLowerCase())
+        sala.ubicacion
+            .toLowerCase()
+            .includes(
+                busqueda.toLowerCase()
+            )
 
     );
 
@@ -122,9 +198,15 @@ function SalaPage() {
 
                 <h2>
 
-                    <FaDoorOpen style={{ marginRight: "8px" }} />
+                    <FaDoorOpen
+                        style={{
+                            marginRight: "8px"
+                        }}
+                    />
 
-                    Gestión de Salas
+                    {esAdmin
+                        ? "Gestión de Salas"
+                        : "Salas disponibles"}
 
                 </h2>
 
@@ -139,20 +221,33 @@ function SalaPage() {
 
                     value={busqueda}
 
-                    onChange={(e) => setBusqueda(e.target.value)}
+                    onChange={(e) =>
+                        setBusqueda(
+                            e.target.value
+                        )
+                    }
 
                 />
 
-                {/* Formulario para registrar o editar */}
-                <FormularioSala
+                {/* 
+                    El formulario solamente se muestra
+                    para los administradores.
+                */}
+                {esAdmin && (
 
-                    agregarSala={agregarSala}
+                    <FormularioSala
 
-                    salaEditar={salaEditar}
+                        agregarSala={agregarSala}
 
-                    setSalaEditar={setSalaEditar}
+                        salaEditar={salaEditar}
 
-                />
+                        setSalaEditar={
+                            setSalaEditar
+                        }
+
+                    />
+
+                )}
 
                 {/* Tabla con los registros */}
                 <TablaSala

@@ -11,11 +11,53 @@ function TablaAula({
     borrarAula
 }) {
 
+    // Obtener el rol del usuario desde el token JWT
+    function obtenerRolUsuario() {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return null;
+        }
+
+        try {
+
+            const partes = token.split(".");
+
+            if (partes.length !== 3) {
+                return null;
+            }
+
+            const payload = JSON.parse(
+                atob(partes[1])
+            );
+
+            return payload.rol;
+
+        } catch (error) {
+
+            console.error(
+                "No se pudo obtener el rol del usuario:",
+                error
+            );
+
+            return null;
+        }
+    }
+
+    const rolUsuario = obtenerRolUsuario();
+
+    const esAdmin = rolUsuario === "ADMIN";
+
     return (
 
         <div className="tabla-container">
 
-            <h3>Listado de Aulas</h3>
+            <h3>
+                {esAdmin
+                    ? "Listado de Aulas"
+                    : "Aulas disponibles"}
+            </h3>
 
             <table className="tabla">
 
@@ -24,13 +66,22 @@ function TablaAula({
                     <tr>
 
                         <th>Nombre</th>
+
                         <th>Edificio</th>
+
                         <th>Capacidad</th>
+
                         <th>Tipo</th>
+
                         <th>Departamento</th>
+
                         <th>Municipio</th>
+
                         <th>Estado</th>
-                        <th>Acciones</th>
+
+                        {esAdmin && (
+                            <th>Acciones</th>
+                        )}
 
                     </tr>
 
@@ -72,35 +123,41 @@ function TablaAula({
                                     : "Inactiva"}
                             </td>
 
-                            <td>
+                            {esAdmin && (
 
-                                <button
-                                    className="editar"
-                                    onClick={() =>
-                                        editarAula(aula)
-                                    }
-                                >
+                                <td>
 
-                                    <FaEdit />
+                                    <button
+                                        className="editar"
+                                        onClick={() =>
+                                            editarAula(aula)
+                                        }
+                                    >
 
-                                    Editar
+                                        <FaEdit />
 
-                                </button>
+                                        Editar
 
-                                <button
-                                    className="eliminar"
-                                    onClick={() =>
-                                        borrarAula(aula.idAula)
-                                    }
-                                >
+                                    </button>
 
-                                    <FaTrash />
+                                    <button
+                                        className="eliminar"
+                                        onClick={() =>
+                                            borrarAula(
+                                                aula.idAula
+                                            )
+                                        }
+                                    >
 
-                                    Eliminar
+                                        <FaTrash />
 
-                                </button>
+                                        Eliminar
 
-                            </td>
+                                    </button>
+
+                                </td>
+
+                            )}
 
                         </tr>
 

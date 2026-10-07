@@ -43,6 +43,44 @@ function AulaPage() {
     // Texto de búsqueda
     const [busqueda, setBusqueda] = useState("");
 
+    // Obtener el rol del usuario desde el token JWT
+    function obtenerRolUsuario() {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return null;
+        }
+
+        try {
+
+            const partes = token.split(".");
+
+            if (partes.length !== 3) {
+                return null;
+            }
+
+            const payload = JSON.parse(
+                atob(partes[1])
+            );
+
+            return payload.rol;
+
+        } catch (error) {
+
+            console.error(
+                "No se pudo obtener el rol del usuario:",
+                error
+            );
+
+            return null;
+        }
+    }
+
+    const rolUsuario = obtenerRolUsuario();
+
+    const esAdmin = rolUsuario === "ADMIN";
+
     // Cargar aulas al abrir la página
     useEffect(() => {
 
@@ -203,7 +241,9 @@ function AulaPage() {
                         }}
                     />
 
-                    Gestión de Aulas
+                    {esAdmin
+                        ? "Gestión de Aulas"
+                        : "Aulas disponibles"}
 
                 </h2>
 
@@ -225,17 +265,25 @@ function AulaPage() {
 
                 />
 
-                <FormularioAula
+                {/* 
+                    El formulario solamente aparece
+                    para los administradores.
+                */}
+                {esAdmin && (
 
-                    agregarAula={agregarAula}
+                    <FormularioAula
 
-                    aulaEditar={aulaEditar}
+                        agregarAula={agregarAula}
 
-                    setAulaEditar={
-                        setAulaEditar
-                    }
+                        aulaEditar={aulaEditar}
 
-                />
+                        setAulaEditar={
+                            setAulaEditar
+                        }
+
+                    />
+
+                )}
 
                 <TablaAula
 

@@ -28,6 +28,52 @@ function DashboardPage() {
     const [totalSalas, setTotalSalas] = useState(0);
     const [totalReservas, setTotalReservas] = useState(0);
 
+    // ==========================================
+    // OBTENER ROL DEL USUARIO
+    // ==========================================
+
+    function obtenerRolUsuario() {
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return "";
+        }
+
+        try {
+
+            const partes = token.split(".");
+
+            if (partes.length !== 3) {
+                return "";
+            }
+
+            const payload = JSON.parse(
+                atob(partes[1])
+            );
+
+            return payload.rol || "";
+
+        } catch (error) {
+
+            console.error(
+                "No se pudo obtener el rol del usuario:",
+                error
+            );
+
+            return "";
+        }
+    }
+
+    const rolUsuario = obtenerRolUsuario();
+
+    const esAdmin = rolUsuario === "ADMIN";
+
+
+    // ==========================================
+    // CARGAR DATOS
+    // ==========================================
+
     useEffect(() => {
 
         cargarDatos();
@@ -43,9 +89,13 @@ function DashboardPage() {
 
             const reservas = await obtenerReservas();
 
-            setTotalSalas(salas.length);
+            setTotalSalas(
+                salas.length
+            );
 
-            setTotalReservas(reservas.length);
+            setTotalReservas(
+                reservas.length
+            );
 
         } catch (error) {
 
@@ -62,17 +112,23 @@ function DashboardPage() {
 
         <>
 
-            {/* Encabezado */}
+            {/* =================================
+                ENCABEZADO
+               ================================= */}
 
             <Header />
 
 
-            {/* Navegación */}
+            {/* =================================
+                NAVEGACIÓN
+               ================================= */}
 
             <Navbar />
 
 
-            {/* Dashboard */}
+            {/* =================================
+                DASHBOARD
+               ================================= */}
 
             <main className="dashboard">
 
@@ -146,7 +202,9 @@ function DashboardPage() {
                             </h2>
 
                             <span>
-                                Reservas registradas
+                                {esAdmin
+                                    ? "Reservas registradas"
+                                    : "Mis reservas"}
                             </span>
 
                         </div>
@@ -176,7 +234,9 @@ function DashboardPage() {
                     <div className="cards">
 
 
-                        {/* Salas */}
+                        {/* =================================
+                            SALAS
+                           ================================= */}
 
                         <Link
                             to="/salas"
@@ -188,18 +248,23 @@ function DashboardPage() {
                             />
 
                             <h3>
-                                Gestión de Salas
+                                {esAdmin
+                                    ? "Gestión de Salas"
+                                    : "Consultar Salas"}
                             </h3>
 
                             <p>
-                                Registrar, editar y
-                                eliminar salas.
+                                {esAdmin
+                                    ? "Registrar, editar y eliminar salas."
+                                    : "Consultar las salas disponibles."}
                             </p>
 
                         </Link>
 
 
-                        {/* Aulas */}
+                        {/* =================================
+                            AULAS
+                           ================================= */}
 
                         <Link
                             to="/aulas"
@@ -211,18 +276,23 @@ function DashboardPage() {
                             />
 
                             <h3>
-                                Gestión de Aulas
+                                {esAdmin
+                                    ? "Gestión de Aulas"
+                                    : "Consultar Aulas"}
                             </h3>
 
                             <p>
-                                Administrar las aulas
-                                disponibles.
+                                {esAdmin
+                                    ? "Administrar las aulas disponibles."
+                                    : "Consultar las aulas disponibles."}
                             </p>
 
                         </Link>
 
 
-                        {/* Reservas */}
+                        {/* =================================
+                            RESERVAS
+                           ================================= */}
 
                         <Link
                             to="/reservas"
@@ -234,38 +304,48 @@ function DashboardPage() {
                             />
 
                             <h3>
-                                Gestión de Reservas
+                                {esAdmin
+                                    ? "Gestión de Reservas"
+                                    : "Mis Reservas"}
                             </h3>
 
                             <p>
-                                Administrar reservas
-                                académicas.
+                                {esAdmin
+                                    ? "Administrar reservas académicas."
+                                    : "Consultar y gestionar mis reservas."}
                             </p>
 
                         </Link>
 
 
-                        {/* Usuarios */}
+                        {/* =================================
+                            USUARIOS
+                            SOLO ADMIN
+                           ================================= */}
 
-                        <Link
-                            to="/usuarios"
-                            className="card"
-                        >
+                        {esAdmin && (
 
-                            <FaUsers
-                                className="icono"
-                            />
+                            <Link
+                                to="/usuarios"
+                                className="card"
+                            >
 
-                            <h3>
-                                Gestión de Usuarios
-                            </h3>
+                                <FaUsers
+                                    className="icono"
+                                />
 
-                            <p>
-                                Administrar los usuarios
-                                del sistema.
-                            </p>
+                                <h3>
+                                    Gestión de Usuarios
+                                </h3>
 
-                        </Link>
+                                <p>
+                                    Administrar los usuarios
+                                    del sistema.
+                                </p>
+
+                            </Link>
+
+                        )}
 
 
                     </div>
@@ -276,7 +356,9 @@ function DashboardPage() {
             </main>
 
 
-            {/* Footer */}
+            {/* =================================
+                FOOTER
+               ================================= */}
 
             <Footer />
 

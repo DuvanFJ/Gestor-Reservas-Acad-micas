@@ -1,4 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Navigate
+} from "react-router-dom";
 
 import DashboardPage from "./pages/DashboardPage";
 import AulaPage from "./pages/AulaPage";
@@ -9,20 +14,110 @@ import Usuario from "./pages/Usuario";
 
 import RutaProtegida from "./components/RutaProtegida";
 
+// ==========================================
+// OBTENER ROL DESDE EL TOKEN JWT
+// ==========================================
+
+function obtenerRolUsuario() {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        return "";
+    }
+
+    try {
+
+        const partes = token.split(".");
+
+        if (partes.length !== 3) {
+            return "";
+        }
+
+        const payload = JSON.parse(
+            atob(partes[1])
+        );
+
+        return payload.rol || "";
+
+    } catch (error) {
+
+        console.error(
+            "No se pudo obtener el rol del usuario:",
+            error
+        );
+
+        return "";
+    }
+}
+
+
+// ==========================================
+// RUTA EXCLUSIVA PARA ADMIN
+// ==========================================
+
+function RutaAdmin({ children }) {
+
+    const token = localStorage.getItem("token");
+
+    // Si no existe token, volver al login
+    if (!token) {
+
+        return (
+            <Navigate
+                to="/login"
+                replace
+            />
+        );
+    }
+
+    const rol = obtenerRolUsuario();
+
+    // Si no es ADMIN, volver al inicio
+    if (rol !== "ADMIN") {
+
+        return (
+            <Navigate
+                to="/"
+                replace
+            />
+        );
+    }
+
+    return children;
+}
+
+
+// ==========================================
+// APP
+// ==========================================
+
 function App() {
 
     return (
+
         <BrowserRouter>
 
             <Routes>
 
-                {/* Login: página pública */}
+                {/* ==================================
+                    LOGIN
+                    PÚBLICO
+                   ================================== */}
+
                 <Route
                     path="/login"
-                    element={<Login />}
+                    element={
+                        <Login />
+                    }
                 />
 
-                {/* Dashboard: página protegida */}
+
+                {/* ==================================
+                    DASHBOARD
+                    PROTEGIDO
+                   ================================== */}
+
                 <Route
                     path="/"
                     element={
@@ -32,7 +127,12 @@ function App() {
                     }
                 />
 
-                {/* Salas: página protegida */}
+
+                {/* ==================================
+                    SALAS
+                    PROTEGIDO
+                   ================================== */}
+
                 <Route
                     path="/salas"
                     element={
@@ -42,7 +142,12 @@ function App() {
                     }
                 />
 
-                {/* Aulas: página protegida */}
+
+                {/* ==================================
+                    AULAS
+                    PROTEGIDO
+                   ================================== */}
+
                 <Route
                     path="/aulas"
                     element={
@@ -52,7 +157,12 @@ function App() {
                     }
                 />
 
-                {/* Reservas: página protegida */}
+
+                {/* ==================================
+                    RESERVAS
+                    PROTEGIDO
+                   ================================== */}
+
                 <Route
                     path="/reservas"
                     element={
@@ -62,13 +172,33 @@ function App() {
                     }
                 />
 
-                {/* Usuarios: página protegida */}
+
+                {/* ==================================
+                    USUARIOS
+                    SOLO ADMIN
+                   ================================== */}
+
                 <Route
                     path="/usuarios"
                     element={
-                        <RutaProtegida>
+                        <RutaAdmin>
                             <Usuario />
-                        </RutaProtegida>
+                        </RutaAdmin>
+                    }
+                />
+
+
+                {/* ==================================
+                    RUTA DESCONOCIDA
+                   ================================== */}
+
+                <Route
+                    path="*"
+                    element={
+                        <Navigate
+                            to="/"
+                            replace
+                        />
                     }
                 />
 
