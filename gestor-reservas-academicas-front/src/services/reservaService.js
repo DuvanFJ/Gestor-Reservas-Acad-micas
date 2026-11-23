@@ -1,7 +1,9 @@
-// URL base del controlador de Reservas en el backend
-const URL = "http://localhost:8080/reservas";
+import { API_BASE_URL } from "./apiConfig";
 
-// Obtener el token JWT guardado durante el inicio de sesión
+// URL base del controlador de Reservas
+const URL = `${API_BASE_URL}/reservas`;
+
+// Obtener el token JWT
 function obtenerToken() {
     const token = localStorage.getItem("token");
 
@@ -20,9 +22,8 @@ function obtenerHeaders() {
     };
 }
 
-// Obtiene todas las reservas registradas
+// Obtiene todas las reservas
 export async function obtenerReservas() {
-
     const respuesta = await fetch(URL, {
         method: "GET",
         headers: obtenerHeaders()
@@ -37,7 +38,6 @@ export async function obtenerReservas() {
 
 // Guarda una nueva reserva
 export async function guardarReserva(reserva) {
-
     const respuesta = await fetch(URL, {
         method: "POST",
         headers: obtenerHeaders(),
@@ -53,7 +53,6 @@ export async function guardarReserva(reserva) {
 
 // Actualiza una reserva existente
 export async function actualizarReserva(id, reserva) {
-
     const respuesta = await fetch(`${URL}/${id}`, {
         method: "PUT",
         headers: obtenerHeaders(),
@@ -69,7 +68,6 @@ export async function actualizarReserva(id, reserva) {
 
 // Elimina una reserva
 export async function eliminarReserva(id) {
-
     const respuesta = await fetch(`${URL}/${id}`, {
         method: "DELETE",
         headers: obtenerHeaders()

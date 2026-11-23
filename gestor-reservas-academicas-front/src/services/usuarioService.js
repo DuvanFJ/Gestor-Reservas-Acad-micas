@@ -1,5 +1,7 @@
-// URL base del controlador de Usuarios en el backend
-const URL = "http://localhost:8080/api/usuarios";
+import { API_BASE_URL } from "./apiConfig";
+
+// URL base del controlador de Usuarios
+const URL = `${API_BASE_URL}/api/usuarios`;
 
 // Obtiene el token JWT guardado en el navegador
 function obtenerToken() {
@@ -8,7 +10,6 @@ function obtenerToken() {
 
 // Obtiene todos los usuarios
 export async function obtenerUsuarios() {
-
     const token = obtenerToken();
 
     const respuesta = await fetch(URL, {
@@ -27,7 +28,6 @@ export async function obtenerUsuarios() {
 
 // Obtiene un usuario por su ID
 export async function obtenerUsuarioPorId(id) {
-
     const token = obtenerToken();
 
     const respuesta = await fetch(`${URL}/${id}`, {
@@ -46,17 +46,14 @@ export async function obtenerUsuarioPorId(id) {
 
 // Registra un nuevo usuario
 export async function guardarUsuario(usuario) {
-
     const token = obtenerToken();
 
     const respuesta = await fetch(URL, {
         method: "POST",
-
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
         },
-
         body: JSON.stringify(usuario)
     });
 
@@ -69,17 +66,14 @@ export async function guardarUsuario(usuario) {
 
 // Actualiza un usuario existente
 export async function actualizarUsuario(id, usuario) {
-
     const token = obtenerToken();
 
     const respuesta = await fetch(`${URL}/${id}`, {
         method: "PUT",
-
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
         },
-
         body: JSON.stringify(usuario)
     });
 
@@ -92,12 +86,10 @@ export async function actualizarUsuario(id, usuario) {
 
 // Elimina un usuario
 export async function eliminarUsuario(id) {
-
     const token = obtenerToken();
 
     const respuesta = await fetch(`${URL}/${id}`, {
         method: "DELETE",
-
         headers: {
             "Authorization": `Bearer ${token}`
         }

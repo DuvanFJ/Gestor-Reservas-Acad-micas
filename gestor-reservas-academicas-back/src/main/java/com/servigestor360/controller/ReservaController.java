@@ -18,7 +18,6 @@ import java.util.List;
  * relacionadas con las reservas académicas.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/reservas")
 public class ReservaController {
 

@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  * Controlador REST encargado de gestionar las operaciones CRUD
  * relacionadas con las salas académicas.
  */
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/salas")
 public class SalaController {

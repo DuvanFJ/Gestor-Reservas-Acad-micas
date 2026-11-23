@@ -1,3 +1,4 @@
+
 package com.servigestor360.service;
 
 import com.servigestor360.entity.Usuario;
@@ -26,7 +27,6 @@ public class UsuarioService {
     // Guardar un nuevo usuario.
     public Usuario guardarUsuario(Usuario usuario) {
 
-        // Encriptar la contraseña antes de guardarla.
         usuario.setPassword(
                 passwordEncoder.encode(usuario.getPassword())
         );
@@ -52,12 +52,15 @@ public class UsuarioService {
             usuario.setNombre(usuarioActualizado.getNombre());
             usuario.setCorreo(usuarioActualizado.getCorreo());
 
-            // Encriptar la nueva contraseña antes de guardarla.
-            usuario.setPassword(
-                    passwordEncoder.encode(
-                            usuarioActualizado.getPassword()
-                    )
-            );
+            // Solo cambiar la contraseña si se recibió una nueva.
+            String nuevaPassword = usuarioActualizado.getPassword();
+
+            if (nuevaPassword != null && !nuevaPassword.isBlank()) {
+
+                usuario.setPassword(
+                        passwordEncoder.encode(nuevaPassword)
+                );
+            }
 
             usuario.setRol(usuarioActualizado.getRol());
 

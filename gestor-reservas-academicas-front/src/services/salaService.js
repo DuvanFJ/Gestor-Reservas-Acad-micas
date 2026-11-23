@@ -1,7 +1,9 @@
-// URL base del controlador de Salas en el backend
-const URL = "http://localhost:8080/salas";
+import { API_BASE_URL } from "./apiConfig";
 
-// Obtener el token JWT guardado durante el inicio de sesión
+// URL base del controlador de Salas
+const URL = `${API_BASE_URL}/salas`;
+
+// Obtener el token JWT
 function obtenerToken() {
     const token = localStorage.getItem("token");
 
@@ -20,9 +22,8 @@ function obtenerHeaders() {
     };
 }
 
-// Obtiene todas las salas registradas
+// Obtiene todas las salas
 export async function obtenerSalas() {
-
     const respuesta = await fetch(URL, {
         method: "GET",
         headers: obtenerHeaders()
@@ -37,7 +38,6 @@ export async function obtenerSalas() {
 
 // Guarda una nueva sala
 export async function guardarSala(sala) {
-
     const respuesta = await fetch(URL, {
         method: "POST",
         headers: obtenerHeaders(),
@@ -53,7 +53,6 @@ export async function guardarSala(sala) {
 
 // Actualiza una sala existente
 export async function actualizarSala(id, sala) {
-
     const respuesta = await fetch(`${URL}/${id}`, {
         method: "PUT",
         headers: obtenerHeaders(),
@@ -69,7 +68,6 @@ export async function actualizarSala(id, sala) {
 
 // Elimina una sala
 export async function eliminarSala(id) {
-
     const respuesta = await fetch(`${URL}/${id}`, {
         method: "DELETE",
         headers: obtenerHeaders()
